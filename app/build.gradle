@@ -24,6 +24,12 @@ android {
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
 
+        /* Base URL */
+        buildConfigField "String", "BASE_URL", "\"http://demo1042273.mockable.io/\""
+
+        /* REST API endpoints */
+        buildConfigField "String", "ENDPOINT_MY_LOCATIONS", "\"mylocations\""
+
         dexOptions {
             javaMaxHeapSize "4g"
         }
@@ -31,7 +37,7 @@ android {
 
     applicationVariants.all { variant ->
         variant.outputs.all {
-            outputFileName = "catpedia_${variant.buildType.name}_${defaultConfig.versionName}(${defaultConfig.versionCode}).apk"
+            outputFileName = "locatio_${variant.buildType.name}_${defaultConfig.versionName}(${defaultConfig.versionCode}).apk"
         }
     }
 
