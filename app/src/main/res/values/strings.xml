@@ -8,5 +8,8 @@
     <string name="alert_ok">OK</string>
     <string name="alert_cancel">Cancel</string>
     <string name="alert_error_unknown">Unknown error</string>
-    <string name="alert_logout">Are you sure you want to logout of Catpedia?</string>
+
+    <!-- Welcome screen -->
+    <string name="application_logo">Application logo</string>
+
 </resources>
