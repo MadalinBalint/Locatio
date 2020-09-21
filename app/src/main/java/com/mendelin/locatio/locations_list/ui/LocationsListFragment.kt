@@ -9,12 +9,12 @@ import android.os.Bundle
 import android.view.View
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.mendelin.catpedia.breeds_list.adapter.MarginItemDecorationVertical
 import com.mendelin.catpedia.constants.Status
 import com.mendelin.locatio.R
 import com.mendelin.locatio.base_classes.BaseFragment
 import com.mendelin.locatio.di.viewmodels.ViewModelProviderFactory
 import com.mendelin.locatio.locations_list.adapter.LocationsAdapter
+import com.mendelin.locatio.locations_list.adapter.MarginItemDecorationVertical
 import com.mendelin.locatio.locations_list.viewmodel.LocationsViewModel
 import com.mendelin.locatio.utils.ResourceUtils
 import kotlinx.android.synthetic.main.fragment_locations_list.*
@@ -82,16 +82,16 @@ class LocationsListFragment : BaseFragment(R.layout.fragment_locations_list) {
     }
 
     private fun observeViewModel() {
-        if (viewModel.getOriginalBreedList().isEmpty()) {
-            viewModel.readBreedsData()
+        if (viewModel.isListEmpty()) {
+            viewModel.readLocationsData()
                 .observe(viewLifecycleOwner, { list ->
                     list?.let { resource ->
                         when (resource.status) {
                             Status.SUCCESS -> {
                                 recyclerLocations.visibility = View.VISIBLE
                                 progressLocationsList.visibility = View.GONE
-                                resource.data?.let { breeds ->
-                                    viewModel.setOriginalBreedList(breeds)
+                                resource.data?.let { locations ->
+                                    viewModel.setLocationsList(locations)
                                 }
                             }
                             Status.ERROR -> {
@@ -111,7 +111,7 @@ class LocationsListFragment : BaseFragment(R.layout.fragment_locations_list) {
                 })
         }
 
-        viewModel.getBreedsList()
+        viewModel.getLocationsList()
             .observe(viewLifecycleOwner, { list ->
                 list?.let {
                     recyclerLocations.visibility = View.GONE

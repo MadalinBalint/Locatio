@@ -11,11 +11,14 @@ import androidx.recyclerview.widget.RecyclerView
 import com.mendelin.locatio.ItemLocationListDataBinding
 import com.mendelin.locatio.locations_list.ui.LocationsListFragmentDirections
 import com.mendelin.locatio.models.LocationInfoObject
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 
 
 class LocationsAdapter :
     ListAdapter<LocationInfoObject, LocationsAdapter.LocationInfoViewHolder>(
-        DiffCallbackBreedsAdapter
+        DiffCallbackLocationsAdapter
     ) {
 
     private val locationsList: ArrayList<LocationInfoObject> = arrayListOf()
@@ -30,7 +33,7 @@ class LocationsAdapter :
         }
     }
 
-    companion object DiffCallbackBreedsAdapter : DiffUtil.ItemCallback<LocationInfoObject>() {
+    companion object DiffCallbackLocationsAdapter : DiffUtil.ItemCallback<LocationInfoObject>() {
         override fun areItemsTheSame(
             oldItem: LocationInfoObject,
             newItem: LocationInfoObject
@@ -55,18 +58,20 @@ class LocationsAdapter :
     }
 
     override fun onBindViewHolder(holder: LocationInfoViewHolder, position: Int) {
-        val breed = locationsList[position]
-        holder.bind(breed)
+        val location = locationsList[position]
+        holder.bind(location)
 
         with(holder.binding.locationCard) {
             setOnClickListener {
-                val action = LocationsListFragmentDirections.actionLocationInfo(breed)
+                GlobalScope.launch {
+                    delay(250L)
 
-                val extras = FragmentNavigatorExtras(
-                    holder.binding.imgLocation to "locationImage"
-                )
+                    val action = LocationsListFragmentDirections.actionLocationInfo(location)
+                    val extras =
+                        FragmentNavigatorExtras(holder.binding.imgLocation to "locationImage")
 
-                findNavController().navigate(action, extras)
+                    findNavController().navigate(action, extras)
+                }
             }
         }
     }

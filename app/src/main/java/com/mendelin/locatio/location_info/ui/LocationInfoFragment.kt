@@ -29,8 +29,6 @@ class LocationInfoFragment : BaseFragment(R.layout.fragment_location_info) {
         binding.location = args.location
         binding.coordinates = "${args.location?.lat}, ${args.location?.lng}"
 
-        binding.txtCoordinates.movementMethod = LinkMovementMethod.getInstance()
-
         return binding.root
     }
 
