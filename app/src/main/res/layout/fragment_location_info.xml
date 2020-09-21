@@ -90,6 +90,7 @@
                 android:id="@+id/txtCoordinates"
                 style="@style/LocationInfoContent"
                 android:text="@{coordinates}"
+                android:textColor="@android:color/holo_blue_dark"
                 tools:text="46.77131, 23.596745" />
 
             <View

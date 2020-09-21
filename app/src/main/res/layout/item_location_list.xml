@@ -24,6 +24,7 @@
         android:clickable="true"
         android:elevation="8dp"
         android:focusable="true"
+        android:foreground="?selectableItemBackground"
         app:cardCornerRadius="16dp"
         app:cardElevation="8dp">
 
@@ -38,8 +39,8 @@
                 android:layout_width="160dp"
                 android:layout_height="128dp"
                 android:adjustViewBounds="true"
-                android:transitionName="locationImage"
                 android:src="@drawable/ic_placeholder"
+                android:transitionName="locationImage"
                 app:imageUrl="@{location.image}" />
 
             <LinearLayout
