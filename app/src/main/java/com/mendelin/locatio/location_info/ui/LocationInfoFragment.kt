@@ -45,15 +45,15 @@ class LocationInfoFragment : BaseFragment(R.layout.fragment_location_info) {
 
         txtCoordinates.setOnClickListener {
             val label = args.location?.label
-            label?.replace(" ","+")
+            label?.replace(" ", "+")
+
             val gmmIntentUri =
                 Uri.parse("geo:0,0?z=15&q=${args.location?.lat},${args.location?.lng}($label)")
             val mapIntent = Intent(Intent.ACTION_VIEW, gmmIntentUri)
-            //mapIntent.setPackage("com.google.android.apps.maps")
+
             if (activity?.packageManager?.let { manager -> mapIntent.resolveActivity(manager) } != null) {
                 startActivity(mapIntent)
             }
-
         }
 
         btnBack.setOnClickListener {
