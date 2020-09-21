@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data class=".ItemLocationListDataBinding">
+
+        <variable
+            name="location"
+            type="com.mendelin.locatio.models.LocationInfoObject" />
+
+        <variable
+            name="distance"
+            type="Float" />
+
+    </data>
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/locationCard"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:animateLayoutChanges="true"
+        android:background="@android:color/darker_gray"
+        android:clickable="true"
+        android:elevation="8dp"
+        android:focusable="true"
+        app:cardCornerRadius="16dp"
+        app:cardElevation="8dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <!-- Location's image -->
+            <ImageView
+                android:id="@+id/imgLocation"
+                android:layout_width="160dp"
+                android:layout_height="128dp"
+                android:adjustViewBounds="true"
+                android:transitionName="locationImage"
+                android:src="@drawable/ic_placeholder"
+                app:imageUrl="@{location.image}" />
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_weight="1"
+                android:orientation="vertical">
+
+                <!-- Address -->
+                <TextView
+                    android:id="@+id/txtAddress"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginTop="16dp"
+                    android:layout_marginEnd="8dp"
+                    android:layout_marginBottom="8dp"
+                    android:fontFamily="@font/montserrat_500_medium"
+                    android:includeFontPadding="false"
+                    android:text="@{location.address}"
+                    android:textColor="@android:color/black"
+                    android:textSize="14sp"
+                    tools:text="Piata Avram Iancu 18" />
+
+                <!-- Distance -->
+                <TextView
+                    android:id="@+id/txtDistance"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginEnd="8dp"
+                    android:layout_marginBottom="16dp"
+                    android:ellipsize="end"
+                    android:fontFamily="@font/montserrat_400_regular"
+                    android:includeFontPadding="false"
+                    android:maxLines="1"
+                    android:text="@{distance.toString()}"
+                    android:textColor="@android:color/black"
+                    android:textSize="12sp"
+                    tools:text="23km" />
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+    </androidx.cardview.widget.CardView>
+
+</layout>

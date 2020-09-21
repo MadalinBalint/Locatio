@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data class=".LocationInfoDataBinding">
+
+        <variable
+            name="location"
+            type="com.mendelin.locatio.models.LocationInfoObject" />
+
+        <variable
+            name="coordinates"
+            type="String" />
+
+    </data>
+
+    <ScrollView
+        android:id="@+id/scrollviewLocationInfo"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:animateLayoutChanges="true"
+        android:background="@android:color/white"
+        android:fillViewport="true"
+        android:scrollbars="vertical"
+        tools:context=".location_info.ui.LocationInfoFragment">
+
+        <LinearLayout
+            android:id="@+id/layoutPages"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <FrameLayout
+                android:layout_width="match_parent"
+                android:layout_height="320dp">
+
+                <!-- Location image -->
+                <ImageView
+                    android:id="@+id/imgLocation"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginBottom="16dp"
+                    android:adjustViewBounds="true"
+                    android:src="@drawable/ic_placeholder"
+                    android:transitionName="locationImage"
+                    app:locationImage="@{location.image}"
+                    tools:src="@tools:sample/backgrounds/scenic" />
+
+                <!-- Back button -->
+                <ImageButton
+                    android:id="@+id/btnBack"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="start"
+                    android:layout_margin="16dp"
+                    android:background="@drawable/button_circle"
+                    android:src="@drawable/ic_backward" />
+
+            </FrameLayout>
+
+            <!-- Location label -->
+            <TextView
+                style="@style/LocationInfoTitle"
+                android:text="@string/location_info_label" />
+
+            <TextView
+                android:id="@+id/txtLabel"
+                style="@style/LocationInfoContent"
+                android:text="@{location.label}"
+                tools:text="Avram Iancu" />
+
+            <!-- Location full address -->
+            <TextView
+                style="@style/LocationInfoTitle"
+                android:text="@string/location_info_address" />
+
+            <TextView
+                android:id="@+id/txtAddress"
+                style="@style/LocationInfoContent"
+                android:text="@{location.address}"
+                tools:text="Piata Avram Iancu 18" />
+
+            <!-- Coordinates country -->
+            <TextView
+                style="@style/LocationInfoTitle"
+                android:text="@string/location_info_coordinates" />
+
+            <TextView
+                android:id="@+id/txtCoordinates"
+                style="@style/LocationInfoContent"
+                android:text="@{coordinates}"
+                tools:text="46.77131, 23.596745" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="32dp" />
+
+        </LinearLayout>
+
+    </ScrollView>
+
+</layout>
