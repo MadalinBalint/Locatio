@@ -50,7 +50,7 @@
                 android:layout_marginBottom="8dp"
                 android:fontFamily="@font/montserrat_500_medium"
                 android:includeFontPadding="false"
-                android:text="@{location.address}"
+                android:text="@{@string/address_text(location.address)}"
                 android:textColor="@android:color/black"
                 android:textSize="14sp"
                 tools:text="Piata Avram Iancu 18" />

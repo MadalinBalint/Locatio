@@ -17,13 +17,12 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.PagerSnapHelper
 import com.google.android.material.snackbar.Snackbar
-import com.mendelin.catpedia.constants.Status
+import com.mendelin.locatio.constants.Status
 import com.mendelin.locatio.BuildConfig
 import com.mendelin.locatio.R
 import com.mendelin.locatio.base_classes.BaseFragment
 import com.mendelin.locatio.di.viewmodels.ViewModelProviderFactory
-import com.mendelin.locatio.locations_list.viewmodel.LocationDataViewModel
-import com.mendelin.locatio.locations_list.viewmodel.LocationsAdapter
+import com.mendelin.locatio.locations_list.adapter.LocationsAdapter
 import com.mendelin.locatio.locations_list.viewmodel.LocationsViewModel
 import com.mendelin.locatio.repository.RealmRepository
 import com.mendelin.locatio.utils.ResourceUtils
@@ -47,8 +46,6 @@ class LocationsListFragment : BaseFragment(R.layout.fragment_locations_list) {
     lateinit var locationsAdapter: LocationsAdapter
 
     private lateinit var viewModel: LocationsViewModel
-
-    private lateinit var dataViewModel: LocationDataViewModel
 
     override fun onResume() {
         super.onResume()
@@ -77,8 +74,6 @@ class LocationsListFragment : BaseFragment(R.layout.fragment_locations_list) {
         super.onViewCreated(view, savedInstanceState)
 
         viewModel = ViewModelProvider(this, providerFactory).get(LocationsViewModel::class.java)
-
-        dataViewModel = ViewModelProvider(this, providerFactory).get(LocationDataViewModel::class.java)
 
         recyclerLocations.apply {
             adapter = locationsAdapter

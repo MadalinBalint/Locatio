@@ -1,4 +1,4 @@
-package com.mendelin.catpedia.constants
+package com.mendelin.locatio.constants
 
 enum class Status {
     SUCCESS,

@@ -4,7 +4,7 @@ import android.location.Location
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.mendelin.catpedia.retrofit.Resource
+import com.mendelin.locatio.retrofit.Resource
 import com.mendelin.locatio.models.LocationInfoObject
 import com.mendelin.locatio.models.LocationInfoRealmObject
 import com.mendelin.locatio.repository.LocationsRepository
@@ -21,7 +21,7 @@ class LocationsViewModel @Inject constructor(
 
     private val locationsList = MutableLiveData<ArrayList<LocationInfoRealmObject>>()
     private val errorFilter = MutableLiveData<String>()
-    private val lastLocation = MutableLiveData<Location>()
+    private var lastLocation: Location? = null
 
     fun getLocationsList(): LiveData<ArrayList<LocationInfoRealmObject>> = locationsList
     fun setLocationsList(list: List<LocationInfoRealmObject>) {
@@ -50,16 +50,17 @@ class LocationsViewModel @Inject constructor(
         }
     }
 
-    fun saveLastLocation(location: Location) = lastLocation.postValue(location)
-    fun setDistanceFromCurrentLocation() {
-        val location = lastLocation.value
+    fun saveLastLocation(location: Location) {
+        lastLocation = location
+    }
 
-        location?.let {
+    fun setDistanceFromCurrentLocation() {
+        lastLocation?.let { location ->
             originalLocationsList.forEach {
                 it.distance = ResourceUtils.getDistanceBetweenLocations(it.lat, it.lng, location)
             }
 
-            locationsList.postValue(originalLocationsList)
+            locationsList.value = originalLocationsList
         }
     }
 }

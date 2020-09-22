@@ -5,14 +5,12 @@ import com.mendelin.locatio.di.main.MainModule
 import com.mendelin.locatio.di.main.MainScope
 import com.mendelin.locatio.di.main.MainViewModelsModule
 import com.mendelin.locatio.di.welcome_screen.WelcomeScreenModule
-import com.mendelin.locatio.di.welcome_screen.WelcomeScreenViewModelsModule
 import com.mendelin.locatio.di.welcome_screen.WelcomeScreenScope
+import com.mendelin.locatio.di.welcome_screen.WelcomeScreenViewModelsModule
 import com.mendelin.locatio.main.MainActivity
 import com.mendelin.locatio.welcome_screen.WelcomeScreenActivity
 import dagger.Module
 import dagger.android.ContributesAndroidInjector
-
-/* Only activities */
 
 @Module
 abstract class ActivityBuildersModule {

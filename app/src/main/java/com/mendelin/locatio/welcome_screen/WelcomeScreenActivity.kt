@@ -6,6 +6,9 @@ import android.os.Handler
 import com.mendelin.locatio.R
 import com.mendelin.locatio.base_classes.BaseActivity
 import com.mendelin.locatio.main.MainActivity
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 
 
 class WelcomeScreenActivity : BaseActivity(R.layout.activity_welcome_screen) {
@@ -16,9 +19,10 @@ class WelcomeScreenActivity : BaseActivity(R.layout.activity_welcome_screen) {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        Handler().postDelayed({
+        GlobalScope.launch {
+            delay(SPLASH_TIME_OUT)
             loadMainScreen()
-        }, SPLASH_TIME_OUT)
+        }
     }
 
     private fun loadMainScreen() {

@@ -11,8 +11,6 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.bumptech.glide.request.RequestOptions
 import com.mendelin.locatio.R
 import com.mendelin.locatio.custom_views.AlertBox
-import com.mendelin.locatio.models.LocationInfoObject
-import com.mendelin.locatio.models.LocationInfoRealmObject
 import java.io.IOException
 import java.util.*
 
@@ -24,13 +22,7 @@ object ResourceUtils {
             dialog.dismiss()
         }
 
-        alert.showAlert(
-            context,
-            context.getString(R.string.alert_error),
-            msg,
-            context.getString(R.string.alert_ok),
-            null
-        )
+        alert.showAlert(context, context.getString(R.string.alert_error), msg, context.getString(R.string.alert_ok), null)
     }
 
     fun showImage(imgView: ImageView, imageUrl: String?) {
@@ -48,6 +40,7 @@ object ResourceUtils {
                 )
                 .load(imageUrl)
                 .optionalCenterCrop()
+                .error(R.drawable.ic_placeholder)
                 .placeholder(circularProgressDrawable)
                 .diskCacheStrategy(DiskCacheStrategy.ALL)
                 .into(imgView)

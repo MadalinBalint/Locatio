@@ -3,7 +3,6 @@ package com.mendelin.locatio.di.main
 import androidx.lifecycle.ViewModel
 import com.mendelin.locatio.di.viewmodels.ViewModelKey
 import com.mendelin.locatio.locations_list.viewmodel.LocationsViewModel
-import com.mendelin.locatio.locations_list.viewmodel.LocationDataViewModel
 import dagger.Binds
 import dagger.Module
 import dagger.multibindings.IntoMap
@@ -14,9 +13,4 @@ abstract class MainViewModelsModule {
     @IntoMap
     @ViewModelKey(LocationsViewModel::class)
     abstract fun bindLocationsViewModel(locationsViewModel: LocationsViewModel): ViewModel
-
-    @Binds
-    @IntoMap
-    @ViewModelKey(LocationDataViewModel::class)
-    abstract fun bindLocationDataViewModel(locationDataViewModel: LocationDataViewModel): ViewModel
 }

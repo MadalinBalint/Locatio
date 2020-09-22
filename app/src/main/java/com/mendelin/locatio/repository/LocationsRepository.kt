@@ -2,9 +2,9 @@ package com.mendelin.locatio.repository
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import com.mendelin.catpedia.retrofit.Resource
 import com.mendelin.locatio.models.LocationInfoObject
 import com.mendelin.locatio.retrofit.LocatioApiService
+import com.mendelin.locatio.retrofit.Resource
 import io.reactivex.rxjava3.schedulers.Schedulers
 import javax.inject.Inject
 

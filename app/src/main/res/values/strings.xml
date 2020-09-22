@@ -42,5 +42,6 @@
     <string name="btn_cancel">Cancel</string>
 
     <string name="distance_text">Distance from your current location is %.02f km</string>
+    <string name="address_text">Address: %s</string>
 
 </resources>

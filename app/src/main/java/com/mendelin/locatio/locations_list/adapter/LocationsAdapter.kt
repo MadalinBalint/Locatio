@@ -1,4 +1,4 @@
-package com.mendelin.locatio.locations_list.viewmodel
+package com.mendelin.locatio.locations_list.adapter
 
 import android.content.Context
 import android.view.LayoutInflater
@@ -10,17 +10,13 @@ import androidx.recyclerview.widget.RecyclerView
 import com.mendelin.locatio.ItemLocationListDataBinding
 import com.mendelin.locatio.locations_list.ui.LocationsListFragmentDirections
 import com.mendelin.locatio.models.LocationInfoRealmObject
-import com.mendelin.locatio.utils.ResourceUtils
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
-import timber.log.Timber
 
 
-class LocationsAdapter(private val viewModel: LocationDataViewModel) :
-    ListAdapter<LocationInfoRealmObject, LocationsAdapter.LocationInfoViewHolder>(
-        DiffCallbackLocationsAdapter
-    ) {
+class LocationsAdapter :
+    ListAdapter<LocationInfoRealmObject, LocationsAdapter.LocationInfoViewHolder>(DiffCallbackLocationsAdapter) {
 
     private val locationsList: ArrayList<LocationInfoRealmObject> = arrayListOf()
     lateinit var context: Context
@@ -34,17 +30,11 @@ class LocationsAdapter(private val viewModel: LocationDataViewModel) :
     }
 
     companion object DiffCallbackLocationsAdapter : DiffUtil.ItemCallback<LocationInfoRealmObject>() {
-        override fun areItemsTheSame(
-            oldItem: LocationInfoRealmObject,
-            newItem: LocationInfoRealmObject
-        ): Boolean {
+        override fun areItemsTheSame(oldItem: LocationInfoRealmObject, newItem: LocationInfoRealmObject): Boolean {
             return (oldItem.lat == newItem.lat && oldItem.lng == newItem.lng)
         }
 
-        override fun areContentsTheSame(
-            oldItem: LocationInfoRealmObject,
-            newItem: LocationInfoRealmObject
-        ): Boolean {
+        override fun areContentsTheSame(oldItem: LocationInfoRealmObject, newItem: LocationInfoRealmObject): Boolean {
             return oldItem.id == newItem.id
         }
     }
@@ -63,19 +53,6 @@ class LocationsAdapter(private val viewModel: LocationDataViewModel) :
 
         with(holder.binding) {
             with(locationCard) {
-                /*lifecycleOwner?.let {
-                    viewModel.getLocation().observe(it) { userLocation ->
-                        userLocation?.let {
-                            Timber.e("$userLocation")
-                            holder.binding.distance = ResourceUtils.getDistanceBetweenLocations(
-                                location.lat,
-                                location.lng,
-                                userLocation
-                            )
-                        }
-                    }
-                }*/
-
                 setOnClickListener {
                     GlobalScope.launch {
                         delay(200L)

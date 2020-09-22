@@ -2,7 +2,7 @@
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/catpedia_navigation"
+    android:id="@+id/locatio_navigation"
     app:startDestination="@id/locationsFragment">
 
     <fragment

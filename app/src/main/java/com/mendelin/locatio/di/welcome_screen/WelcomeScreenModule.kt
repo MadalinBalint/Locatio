@@ -4,7 +4,4 @@ import dagger.Module
 
 @Module
 class WelcomeScreenModule {
-    /*@WelcomeScreenScope
-    @Provides
-    fun provideLoginMockupRepository(): LoginMockupRepository = LoginMockupRepository()*/
 }
