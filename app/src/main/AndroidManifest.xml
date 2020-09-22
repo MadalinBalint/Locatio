@@ -15,7 +15,7 @@
 
     <application
         android:name=".LocatioApplication"
-        android:allowBackup="true"
+        android:allowBackup="false"
         android:icon="@drawable/ic_logo"
         android:label="@string/app_name"
         android:requestLegacyExternalStorage="true"
@@ -53,12 +53,6 @@
             android:theme="@style/AppTheme.NoActionBar"
             android:windowSoftInputMode="adjustResize"
             tools:ignore="LockedOrientationActivity" />
-
-        <service
-            android:name=".service.ForegroundOnlyLocationService"
-            android:enabled="true"
-            android:exported="false"
-            android:foregroundServiceType="location" />
 
     </application>
 
