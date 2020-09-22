@@ -17,6 +17,15 @@
             android:id="@+id/toolbar"
             style="@style/ToolbarStyle">
 
+            <Button
+                android:id="@+id/btnAddLocation"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="end|center_vertical"
+                android:layout_marginEnd="16dp"
+                android:text="@string/btn_add_location"
+                android:textSize="12sp" />
+
         </androidx.appcompat.widget.Toolbar>
 
     </com.google.android.material.appbar.AppBarLayout>
