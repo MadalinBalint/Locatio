@@ -50,6 +50,8 @@
             <EditText
                 android:id="@+id/editLatitude"
                 style="@style/LocationInfoContent"
+                android:imeOptions="actionNext"
+                android:inputType="numberDecimal"
                 android:text="@{Double.toString(location.lat)}"
                 tools:text="46.77131" />
 
@@ -61,6 +63,8 @@
             <EditText
                 android:id="@+id/editLongitude"
                 style="@style/LocationInfoContent"
+                android:imeOptions="actionNext"
+                android:inputType="numberDecimal"
                 android:text="@{Double.toString(location.lng)}"
                 tools:text="23.596745" />
 
@@ -72,6 +76,8 @@
             <EditText
                 android:id="@+id/editLabel"
                 style="@style/LocationInfoContent"
+                android:imeOptions="actionNext"
+                android:inputType="text"
                 android:text="@{location.label}"
                 tools:text="Avram Iancu" />
 
@@ -83,6 +89,8 @@
             <EditText
                 android:id="@+id/editAddress"
                 style="@style/LocationInfoContent"
+                android:imeOptions="actionNext"
+                android:inputType="textPostalAddress"
                 android:text="@{location.address}"
                 tools:text="Piata Avram Iancu 18" />
 
@@ -94,8 +102,15 @@
             <EditText
                 android:id="@+id/editImage"
                 style="@style/LocationInfoContent"
+                android:imeOptions="actionDone"
+                android:inputType="textUri"
                 android:text="@{location.image}"
                 tools:text="https://upload.wikimedia.org/wikipedia/commons/7/79/Catedrala_Arhiepiscopiei_din_Cluj-Napoca.jpg" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1" />
 
             <Button
                 android:id="@+id/btnSaveLocation"
@@ -111,7 +126,7 @@
                 style="@style/FlatButtonBlack"
                 android:layout_marginStart="32dp"
                 android:layout_marginEnd="32dp"
-                android:layout_marginBottom="32dp"
+                android:layout_marginBottom="16dp"
                 android:text="@string/btn_cancel" />
 
         </LinearLayout>

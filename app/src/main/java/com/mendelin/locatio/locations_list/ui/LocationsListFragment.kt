@@ -59,7 +59,7 @@ class LocationsListFragment : BaseFragment(R.layout.fragment_locations_list) {
         Timber.e("Locations count = $count")
         if (count > 0) {
             Timber.e("Reading data from Realm database")
-            val list = repository.queryLocations()
+            val list = repository.readLocationsList()
             viewModel.setLocationsList(list)
         } else {
             Timber.e("Reading data from REST API")
@@ -71,8 +71,8 @@ class LocationsListFragment : BaseFragment(R.layout.fragment_locations_list) {
                                 recyclerLocations.visibility = View.VISIBLE
                                 progressLocationsList.visibility = View.GONE
                                 resource.data?.let { locations ->
-                                    repository.saveLocations(locations)
-                                    viewModel.setLocationsList(repository.queryLocations())
+                                    repository.saveLocationsList(locations)
+                                    viewModel.setLocationsList(repository.readLocationsList())
                                 }
                             }
                             Status.ERROR -> {
