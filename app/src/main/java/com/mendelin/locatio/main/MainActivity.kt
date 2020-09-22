@@ -11,6 +11,7 @@ import android.provider.Settings
 import androidx.core.app.ActivityCompat
 import androidx.lifecycle.ViewModelProvider
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
+import androidx.navigation.Navigation
 import com.google.android.material.snackbar.Snackbar
 import com.mendelin.locatio.BuildConfig
 import com.mendelin.locatio.R
@@ -113,6 +114,10 @@ class MainActivity : BaseActivity(R.layout.activity_main) {
         }
 
         viewModel = ViewModelProvider(this, providerFactory).get(LocationDataViewModel::class.java)
+
+        btnAddLocation.setOnClickListener {
+            Navigation.findNavController(this, R.id.navHostFragment).navigate(R.id.addLocationFragment)
+        }
     }
 
     private fun foregroundPermissionApproved(): Boolean {
@@ -134,62 +139,39 @@ class MainActivity : BaseActivity(R.layout.activity_main) {
             )
                 .setAction(R.string.ok) {
                     // Request permission
-                    ActivityCompat.requestPermissions(
-                        this@MainActivity,
-                        arrayOf(Manifest.permission.ACCESS_FINE_LOCATION),
-                        REQUEST_FOREGROUND_ONLY_PERMISSIONS_REQUEST_CODE
-                    )
+                    ActivityCompat.requestPermissions(this@MainActivity, arrayOf(Manifest.permission.ACCESS_FINE_LOCATION), REQUEST_FOREGROUND_ONLY_PERMISSIONS_REQUEST_CODE)
                 }
                 .show()
         } else {
             Timber.d("Request foreground only permission")
-            ActivityCompat.requestPermissions(
-                this@MainActivity,
-                arrayOf(Manifest.permission.ACCESS_FINE_LOCATION),
-                REQUEST_FOREGROUND_ONLY_PERMISSIONS_REQUEST_CODE
-            )
+            ActivityCompat.requestPermissions(this@MainActivity, arrayOf(Manifest.permission.ACCESS_FINE_LOCATION), REQUEST_FOREGROUND_ONLY_PERMISSIONS_REQUEST_CODE)
         }
     }
 
-    override fun onRequestPermissionsResult(
-        requestCode: Int,
-        permissions: Array<String>,
-        grantResults: IntArray
-    ) {
+    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String>, grantResults: IntArray) {
         Timber.d("onRequestPermissionResult")
 
         when (requestCode) {
             REQUEST_FOREGROUND_ONLY_PERMISSIONS_REQUEST_CODE -> when {
                 grantResults.isEmpty() ->
-                    // If user interaction was interrupted, the permission request
-                    // is cancelled and you receive empty arrays.
+                    /* If user interaction was interrupted, the permission request is cancelled and you receive empty arrays */
                     Timber.d("User interaction was cancelled.")
 
                 grantResults[0] == PackageManager.PERMISSION_GRANTED ->
-                    // Permission was granted.
+                    /* Permission was granted */
                     foregroundOnlyLocationService?.subscribeToLocationUpdates()
 
                 else -> {
-                    // Permission denied.
-                    //updateButtonState(false)
-
-                    Snackbar.make(
-                        findViewById(R.id.layoutMainActivity),
-                        R.string.permission_denied_explanation,
-                        Snackbar.LENGTH_LONG
-                    )
+                    /* Permission denied */
+                    Snackbar.make(findViewById(R.id.layoutMainActivity), R.string.permission_denied_explanation, Snackbar.LENGTH_LONG)
                         .setAction(R.string.settings) {
-                            // Build intent that displays the App settings screen.
-                            val intent = Intent()
-                            intent.action = Settings.ACTION_APPLICATION_DETAILS_SETTINGS
-                            val uri = Uri.fromParts(
-                                "package",
-                                BuildConfig.APPLICATION_ID,
-                                null
-                            )
-                            intent.data = uri
-                            intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
-                            startActivity(intent)
+                            val uri = Uri.fromParts("package", BuildConfig.APPLICATION_ID, null)
+                            with(Intent()) {
+                                action = Settings.ACTION_APPLICATION_DETAILS_SETTINGS
+                                data = uri
+                                flags = Intent.FLAG_ACTIVITY_NEW_TASK
+                                startActivity(this)
+                            }
                         }
                         .show()
                 }
@@ -198,7 +180,6 @@ class MainActivity : BaseActivity(R.layout.activity_main) {
     }
 
     private inner class ForegroundOnlyBroadcastReceiver : BroadcastReceiver() {
-
         override fun onReceive(context: Context, intent: Intent) {
             val location = intent.getParcelableExtra<Location>(
                 ForegroundOnlyLocationService.EXTRA_LOCATION
