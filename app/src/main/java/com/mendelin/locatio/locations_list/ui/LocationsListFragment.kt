@@ -8,6 +8,7 @@ import android.location.LocationListener
 import android.location.LocationManager
 import android.net.Uri
 import android.os.Bundle
+import android.os.Looper
 import android.provider.Settings
 import android.view.View
 import android.widget.Toast
@@ -24,7 +25,6 @@ import com.mendelin.locatio.di.viewmodels.ViewModelProviderFactory
 import com.mendelin.locatio.locations_list.viewmodel.LocationDataViewModel
 import com.mendelin.locatio.locations_list.viewmodel.LocationsAdapter
 import com.mendelin.locatio.locations_list.viewmodel.LocationsViewModel
-import com.mendelin.locatio.main.MainActivity
 import com.mendelin.locatio.repository.RealmRepository
 import com.mendelin.locatio.utils.ResourceUtils
 import kotlinx.android.synthetic.main.fragment_locations_list.*
@@ -32,6 +32,10 @@ import timber.log.Timber
 import javax.inject.Inject
 
 class LocationsListFragment : BaseFragment(R.layout.fragment_locations_list) {
+
+    companion object {
+        const val REQUEST_FOREGROUND_ONLY_PERMISSIONS_REQUEST_CODE = 1000
+    }
 
     @Inject
     lateinit var repository: RealmRepository
@@ -53,6 +57,7 @@ class LocationsListFragment : BaseFragment(R.layout.fragment_locations_list) {
     }
 
     private fun getLocation() {
+        Timber.e("getLocation")
         val locationManager = context?.getSystemService(LOCATION_SERVICE) as LocationManager?
 
         val locationListener = LocationListener {
@@ -61,7 +66,7 @@ class LocationsListFragment : BaseFragment(R.layout.fragment_locations_list) {
         }
 
         try {
-            locationManager?.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 1000L, 0f, locationListener)
+            locationManager?.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 1000L, 0f, locationListener, Looper.getMainLooper())
         } catch (ex: SecurityException) {
             Toast.makeText(activity, "Error while trying to retrieve location!", Toast.LENGTH_SHORT).show()
         }
@@ -84,6 +89,7 @@ class LocationsListFragment : BaseFragment(R.layout.fragment_locations_list) {
         snapHelper.attachToRecyclerView(recyclerLocations)
 
         if (foregroundPermissionApproved()) {
+            Timber.e("foregroundPermissionApproved")
             getLocation()
         } else {
             requestForegroundPermissions()
@@ -142,7 +148,8 @@ class LocationsListFragment : BaseFragment(R.layout.fragment_locations_list) {
     }
 
     private fun foregroundPermissionApproved() =
-        PackageManager.PERMISSION_GRANTED == ActivityCompat.checkSelfPermission(requireContext(), Manifest.permission.ACCESS_FINE_LOCATION)
+        ActivityCompat.checkSelfPermission(requireContext(), Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED ||
+                ActivityCompat.checkSelfPermission(requireContext(), Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED
 
     private fun requestForegroundPermissions() {
         val provideRationale = foregroundPermissionApproved()
@@ -155,13 +162,12 @@ class LocationsListFragment : BaseFragment(R.layout.fragment_locations_list) {
                 Snackbar.LENGTH_LONG
             )
                 .setAction(R.string.ok) {
-                    // Request permission
-                    ActivityCompat.requestPermissions(requireActivity(), arrayOf(Manifest.permission.ACCESS_FINE_LOCATION), MainActivity.REQUEST_FOREGROUND_ONLY_PERMISSIONS_REQUEST_CODE)
+                    requestPermissions(arrayOf(Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION), REQUEST_FOREGROUND_ONLY_PERMISSIONS_REQUEST_CODE)
                 }
                 .show()
         } else {
             Timber.d("Request foreground only permission")
-            ActivityCompat.requestPermissions(requireActivity(), arrayOf(Manifest.permission.ACCESS_FINE_LOCATION), MainActivity.REQUEST_FOREGROUND_ONLY_PERMISSIONS_REQUEST_CODE)
+            requestPermissions(arrayOf(Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION), REQUEST_FOREGROUND_ONLY_PERMISSIONS_REQUEST_CODE)
         }
     }
 
@@ -169,14 +175,16 @@ class LocationsListFragment : BaseFragment(R.layout.fragment_locations_list) {
         Timber.d("onRequestPermissionResult")
 
         when (requestCode) {
-            MainActivity.REQUEST_FOREGROUND_ONLY_PERMISSIONS_REQUEST_CODE -> when {
+            REQUEST_FOREGROUND_ONLY_PERMISSIONS_REQUEST_CODE -> when {
                 grantResults.isEmpty() ->
                     /* If user interaction was interrupted, the permission request is cancelled and you receive empty arrays */
                     Timber.d("User interaction was cancelled.")
 
-                grantResults[0] == PackageManager.PERMISSION_GRANTED ->
+                grantResults[0] == PackageManager.PERMISSION_GRANTED -> {
                     /* Permission was granted */
+                    Timber.e("PERMISSION_GRANTED")
                     getLocation()
+                }
 
                 else -> {
                     /* Permission denied */
