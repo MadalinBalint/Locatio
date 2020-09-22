@@ -1,51 +1,49 @@
-package com.mendelin.locatio.locations_list.adapter
+package com.mendelin.locatio.locations_list.viewmodel
 
 import android.content.Context
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.navigation.findNavController
-import androidx.navigation.fragment.FragmentNavigatorExtras
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.mendelin.locatio.ItemLocationListDataBinding
 import com.mendelin.locatio.locations_list.ui.LocationsListFragmentDirections
 import com.mendelin.locatio.models.LocationInfoObject
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
+import com.mendelin.locatio.models.LocationInfoRealmObject
+import com.mendelin.locatio.utils.ResourceUtils
+import timber.log.Timber
 
 
-class LocationsAdapter :
-    ListAdapter<LocationInfoObject, LocationsAdapter.LocationInfoViewHolder>(
+class LocationsAdapter(private val viewModel: LocationDataViewModel) :
+    ListAdapter<LocationInfoRealmObject, LocationsAdapter.LocationInfoViewHolder>(
         DiffCallbackLocationsAdapter
     ) {
 
-    private val locationsList: ArrayList<LocationInfoObject> = arrayListOf()
+    private val locationsList: ArrayList<LocationInfoRealmObject> = arrayListOf()
     lateinit var context: Context
 
     class LocationInfoViewHolder(var binding: ItemLocationListDataBinding) :
         RecyclerView.ViewHolder(binding.root) {
-        fun bind(property: LocationInfoObject) {
+        fun bind(property: LocationInfoRealmObject) {
             binding.location = property
-            binding.distance = 1f
             binding.executePendingBindings()
         }
     }
 
-    companion object DiffCallbackLocationsAdapter : DiffUtil.ItemCallback<LocationInfoObject>() {
+    companion object DiffCallbackLocationsAdapter : DiffUtil.ItemCallback<LocationInfoRealmObject>() {
         override fun areItemsTheSame(
-            oldItem: LocationInfoObject,
-            newItem: LocationInfoObject
+            oldItem: LocationInfoRealmObject,
+            newItem: LocationInfoRealmObject
         ): Boolean {
             return (oldItem.lat == newItem.lat && oldItem.lng == newItem.lng)
         }
 
         override fun areContentsTheSame(
-            oldItem: LocationInfoObject,
-            newItem: LocationInfoObject
+            oldItem: LocationInfoRealmObject,
+            newItem: LocationInfoRealmObject
         ): Boolean {
-            return oldItem == newItem
+            return oldItem.id == newItem.id
         }
     }
 
@@ -61,22 +59,30 @@ class LocationsAdapter :
         val location = locationsList[position]
         holder.bind(location)
 
-        with(holder.binding.locationCard) {
-            setOnClickListener {
-                GlobalScope.launch {
-                    delay(250L)
+        with(holder.binding) {
+            with(locationCard) {
+                lifecycleOwner?.let {
+                    viewModel.getLocation().observe(it) { userLocation ->
+                        userLocation?.let {
+                            Timber.e("$userLocation")
+                            holder.binding.distance = ResourceUtils.getDistanceBetweenLocations(
+                                location.lat,
+                                location.lng,
+                                userLocation
+                            )
+                        }
+                    }
+                }
 
+                setOnClickListener {
                     val action = LocationsListFragmentDirections.actionLocationInfo(location)
-                    val extras =
-                        FragmentNavigatorExtras(holder.binding.imgLocation to "locationImage")
-
-                    findNavController().navigate(action, extras)
+                    findNavController().navigate(action)
                 }
             }
         }
     }
 
-    fun setList(list: List<LocationInfoObject>) {
+    fun setList(list: List<LocationInfoRealmObject>) {
         list.sortedBy { it.address }
 
         locationsList.apply {

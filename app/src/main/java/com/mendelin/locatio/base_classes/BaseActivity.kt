@@ -19,18 +19,4 @@ abstract class BaseActivity(private val layoutId: Int) : DaggerAppCompatActivity
         }
         return true
     }
-
-    override fun onResume() {
-        setAnimation()
-        super.onResume()
-    }
-
-    override fun onPause() {
-        setAnimation()
-        super.onPause()
-    }
-
-    private fun setAnimation() {
-        overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out)
-    }
 }

@@ -13,14 +13,6 @@ import dagger.android.support.DaggerFragment
 abstract class BaseFragment(private val layoutId: Int) : DaggerFragment() {
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        /* Determine how shared elements are handled */
-        sharedElementEnterTransition = ChangeBounds().apply {
-            duration = 500
-        }
-        sharedElementReturnTransition = ChangeBounds().apply {
-            duration = 500
-        }
-
         return inflater.inflate(layoutId, container, false)
     }
 

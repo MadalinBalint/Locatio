@@ -1,8 +1,8 @@
 package com.mendelin.locatio.di
 
 import android.app.Application
-import com.mendelin.locatio.di.viewmodels.ViewModelFactoryModule
 import com.mendelin.locatio.LocatioApplication
+import com.mendelin.locatio.di.viewmodels.ViewModelFactoryModule
 import dagger.BindsInstance
 import dagger.Component
 import dagger.android.AndroidInjectionModule
