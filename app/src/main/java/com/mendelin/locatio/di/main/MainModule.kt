@@ -1,7 +1,9 @@
 package com.mendelin.locatio.di.main
 
-import com.mendelin.locatio.locations_list.adapter.LocationsAdapter
+import com.mendelin.locatio.locations_list.viewmodel.LocationsAdapter
+import com.mendelin.locatio.locations_list.viewmodel.LocationDataViewModel
 import com.mendelin.locatio.repository.LocationsRepository
+import com.mendelin.locatio.repository.RealmRepository
 import com.mendelin.locatio.retrofit.LocatioApiService
 import dagger.Module
 import dagger.Provides
@@ -21,5 +23,9 @@ class MainModule {
 
     @MainScope
     @Provides
-    fun provideLocationsAdapter(): LocationsAdapter = LocationsAdapter()
+    fun provideLocationsAdapter(viewModel: LocationDataViewModel): LocationsAdapter = LocationsAdapter(viewModel)
+
+    @MainScope
+    @Provides
+    fun provideRealmRepository(): RealmRepository = RealmRepository()
 }
