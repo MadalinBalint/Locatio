@@ -1,7 +1,6 @@
 package com.mendelin.locatio.base_classes
 
 import android.os.Bundle
-import android.transition.ChangeBounds
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup

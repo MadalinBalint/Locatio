@@ -14,7 +14,6 @@ import com.mendelin.locatio.locations_list.viewmodel.LocationsViewModel
 import com.mendelin.locatio.repository.RealmRepository
 import com.mendelin.locatio.utils.ResourceUtils
 import kotlinx.android.synthetic.main.fragment_locations_list.*
-import timber.log.Timber
 import javax.inject.Inject
 
 class LocationsListFragment : BaseFragment(R.layout.fragment_locations_list) {
@@ -55,42 +54,33 @@ class LocationsListFragment : BaseFragment(R.layout.fragment_locations_list) {
     }
 
     private fun observeViewModel() {
-        val count = repository.countLocations()
-        Timber.e("Locations count = $count")
-        if (count > 0) {
-            Timber.e("Reading data from Realm database")
-            val list = repository.readLocationsList()
-            viewModel.setLocationsList(list)
-        } else {
-            Timber.e("Reading data from REST API")
-            viewModel.readLocationsData()
-                .observe(viewLifecycleOwner, { list ->
-                    list?.let { resource ->
-                        when (resource.status) {
-                            Status.SUCCESS -> {
-                                recyclerLocations.visibility = View.VISIBLE
-                                progressLocationsList.visibility = View.GONE
-                                resource.data?.let { locations ->
-                                    repository.saveLocationsList(locations)
-                                    viewModel.setLocationsList(repository.readLocationsList())
-                                }
-                            }
-                            Status.ERROR -> {
-                                recyclerLocations.visibility = View.VISIBLE
-                                progressLocationsList.visibility = View.GONE
-                                ResourceUtils.showErrorAlert(
-                                    requireContext(), list.message
-                                        ?: getString(R.string.alert_error_unknown)
-                                )
-                            }
-                            Status.LOADING -> {
-                                progressLocationsList.visibility = View.VISIBLE
-                                recyclerLocations.visibility = View.GONE
+        viewModel.readLocationsData()
+            ?.observe(viewLifecycleOwner, { list ->
+                list?.let { resource ->
+                    when (resource.status) {
+                        Status.SUCCESS -> {
+                            recyclerLocations.visibility = View.VISIBLE
+                            progressLocationsList.visibility = View.GONE
+                            resource.data?.let { locations ->
+                                repository.saveLocationsList(locations)
+                                viewModel.setLocationsList(repository.readLocationsList())
                             }
                         }
+                        Status.ERROR -> {
+                            recyclerLocations.visibility = View.VISIBLE
+                            progressLocationsList.visibility = View.GONE
+                            ResourceUtils.showErrorAlert(
+                                requireContext(), list.message
+                                    ?: getString(R.string.alert_error_unknown)
+                            )
+                        }
+                        Status.LOADING -> {
+                            progressLocationsList.visibility = View.VISIBLE
+                            recyclerLocations.visibility = View.GONE
+                        }
                     }
-                })
-        }
+                }
+            })
 
         viewModel.getLocationsList()
             .observe(viewLifecycleOwner, { list ->

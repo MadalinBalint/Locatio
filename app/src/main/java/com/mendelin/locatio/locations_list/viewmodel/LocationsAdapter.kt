@@ -9,9 +9,11 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.mendelin.locatio.ItemLocationListDataBinding
 import com.mendelin.locatio.locations_list.ui.LocationsListFragmentDirections
-import com.mendelin.locatio.models.LocationInfoObject
 import com.mendelin.locatio.models.LocationInfoRealmObject
 import com.mendelin.locatio.utils.ResourceUtils
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import timber.log.Timber
 
 
@@ -75,8 +77,11 @@ class LocationsAdapter(private val viewModel: LocationDataViewModel) :
                 }
 
                 setOnClickListener {
-                    val action = LocationsListFragmentDirections.actionLocationInfo(location)
-                    findNavController().navigate(action)
+                    GlobalScope.launch {
+                        delay(200L)
+                        val action = LocationsListFragmentDirections.actionLocationInfo(location)
+                        findNavController().navigate(action)
+                    }
                 }
             }
         }
