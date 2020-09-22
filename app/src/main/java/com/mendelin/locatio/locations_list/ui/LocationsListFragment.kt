@@ -61,7 +61,8 @@ class LocationsListFragment : BaseFragment(R.layout.fragment_locations_list) {
         val locationManager = context?.getSystemService(LOCATION_SERVICE) as LocationManager?
 
         val locationListener = LocationListener {
-            viewModel.setDistanceFromCurrentLocation(it)
+            viewModel.saveLastLocation(it)
+            viewModel.setDistanceFromCurrentLocation()
             Timber.e(it.toString())
         }
 
@@ -110,6 +111,7 @@ class LocationsListFragment : BaseFragment(R.layout.fragment_locations_list) {
                             resource.data?.let { locations ->
                                 repository.saveLocationsList(locations)
                                 viewModel.setLocationsList(repository.readLocationsList())
+                                viewModel.setDistanceFromCurrentLocation()
                             }
                         }
                         Status.ERROR -> {

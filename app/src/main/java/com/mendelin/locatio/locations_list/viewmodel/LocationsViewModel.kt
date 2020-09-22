@@ -21,6 +21,7 @@ class LocationsViewModel @Inject constructor(
 
     private val locationsList = MutableLiveData<ArrayList<LocationInfoRealmObject>>()
     private val errorFilter = MutableLiveData<String>()
+    private val lastLocation = MutableLiveData<Location>()
 
     fun getLocationsList(): LiveData<ArrayList<LocationInfoRealmObject>> = locationsList
     fun setLocationsList(list: List<LocationInfoRealmObject>) {
@@ -41,6 +42,7 @@ class LocationsViewModel @Inject constructor(
             Timber.e("Reading data from Realm database")
             val list = repository.readLocationsList()
             setLocationsList(list)
+            setDistanceFromCurrentLocation()
             null
         } else {
             Timber.e("Reading data from REST API")
@@ -48,11 +50,16 @@ class LocationsViewModel @Inject constructor(
         }
     }
 
-    fun setDistanceFromCurrentLocation(location: Location) {
-        for (entry in originalLocationsList) {
-            entry.distance = ResourceUtils.getDistanceBetweenLocations(entry.lat, entry.lng, location)
-        }
+    fun saveLastLocation(location: Location) = lastLocation.postValue(location)
+    fun setDistanceFromCurrentLocation() {
+        val location = lastLocation.value
 
-        locationsList.postValue(originalLocationsList)
+        location?.let {
+            originalLocationsList.forEach {
+                it.distance = ResourceUtils.getDistanceBetweenLocations(it.lat, it.lng, location)
+            }
+
+            locationsList.postValue(originalLocationsList)
+        }
     }
 }
