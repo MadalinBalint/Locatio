@@ -5,6 +5,7 @@ import com.mendelin.locatio.di.DaggerAppComponent
 import com.mendelin.locatio.logging.TimberPlant
 import dagger.android.AndroidInjector
 import dagger.android.DaggerApplication
+import io.realm.Realm
 import javax.inject.Inject
 
 class LocatioApplication @Inject constructor() : DaggerApplication() {
@@ -23,5 +24,7 @@ class LocatioApplication @Inject constructor() : DaggerApplication() {
         super.onCreate()
 
         TimberPlant.plantTimberDebugLogger()
+
+        Realm.init(this)
     }
 }
