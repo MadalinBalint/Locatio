@@ -1,23 +1,22 @@
 package com.mendelin.locatio.main
 
 import android.Manifest
-import android.content.*
+import android.content.ComponentName
+import android.content.Context
+import android.content.Intent
+import android.content.ServiceConnection
 import android.content.pm.PackageManager
-import android.location.Location
 import android.net.Uri
 import android.os.Bundle
 import android.os.IBinder
 import android.provider.Settings
 import androidx.core.app.ActivityCompat
-import androidx.lifecycle.ViewModelProvider
-import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import androidx.navigation.Navigation
 import com.google.android.material.snackbar.Snackbar
 import com.mendelin.locatio.BuildConfig
 import com.mendelin.locatio.R
 import com.mendelin.locatio.base_classes.BaseActivity
 import com.mendelin.locatio.di.viewmodels.ViewModelProviderFactory
-import com.mendelin.locatio.locations_list.viewmodel.LocationDataViewModel
 import com.mendelin.locatio.service.ForegroundOnlyLocationService
 import kotlinx.android.synthetic.main.activity_main.*
 import timber.log.Timber
@@ -32,15 +31,11 @@ class MainActivity : BaseActivity(R.layout.activity_main) {
     @Inject
     lateinit var providerFactory: ViewModelProviderFactory
 
-    private lateinit var viewModel: LocationDataViewModel
-
     private var foregroundOnlyLocationServiceBound = false
 
     // Provides location updates for while-in-use feature.
     private var foregroundOnlyLocationService: ForegroundOnlyLocationService? = null
 
-    // Listens for location broadcasts from ForegroundOnlyLocationService.
-    private lateinit var foregroundOnlyBroadcastReceiver: ForegroundOnlyBroadcastReceiver
 
     // Monitors connection to the while-in-use service.
     private val foregroundOnlyServiceConnection = object : ServiceConnection {
@@ -64,23 +59,6 @@ class MainActivity : BaseActivity(R.layout.activity_main) {
         bindService(serviceIntent, foregroundOnlyServiceConnection, Context.BIND_AUTO_CREATE)
     }
 
-    override fun onResume() {
-        super.onResume()
-        LocalBroadcastManager.getInstance(this).registerReceiver(
-            foregroundOnlyBroadcastReceiver,
-            IntentFilter(
-                ForegroundOnlyLocationService.ACTION_FOREGROUND_ONLY_LOCATION_BROADCAST
-            )
-        )
-    }
-
-    override fun onPause() {
-        LocalBroadcastManager.getInstance(this).unregisterReceiver(
-            foregroundOnlyBroadcastReceiver
-        )
-        super.onPause()
-    }
-
     override fun onStop() {
         if (foregroundOnlyLocationServiceBound) {
             unbindService(foregroundOnlyServiceConnection)
@@ -92,8 +70,6 @@ class MainActivity : BaseActivity(R.layout.activity_main) {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
-        foregroundOnlyBroadcastReceiver = ForegroundOnlyBroadcastReceiver()
 
         if (foregroundPermissionApproved()) {
             foregroundOnlyLocationService?.subscribeToLocationUpdates()
@@ -112,8 +88,6 @@ class MainActivity : BaseActivity(R.layout.activity_main) {
                 setDisplayHomeAsUpEnabled(false)
             }
         }
-
-        viewModel = ViewModelProvider(this, providerFactory).get(LocationDataViewModel::class.java)
 
         btnAddLocation.setOnClickListener {
             Navigation.findNavController(this, R.id.navHostFragment).navigate(R.id.addLocationFragment)
@@ -175,19 +149,6 @@ class MainActivity : BaseActivity(R.layout.activity_main) {
                         }
                         .show()
                 }
-            }
-        }
-    }
-
-    private inner class ForegroundOnlyBroadcastReceiver : BroadcastReceiver() {
-        override fun onReceive(context: Context, intent: Intent) {
-            val location = intent.getParcelableExtra<Location>(
-                ForegroundOnlyLocationService.EXTRA_LOCATION
-            )
-
-            location?.let {
-                viewModel.setLocation(it)
-                Timber.e(it.toString())
             }
         }
     }

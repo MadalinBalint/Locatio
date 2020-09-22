@@ -41,4 +41,6 @@
     <string name="btn_save_location">Save location</string>
     <string name="btn_cancel">Cancel</string>
 
+    <string name="distance_text">Distance from your current location is %.02f km</string>
+
 </resources>

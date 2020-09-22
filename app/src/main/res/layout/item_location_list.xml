@@ -9,10 +9,6 @@
             name="location"
             type="com.mendelin.locatio.models.LocationInfoRealmObject" />
 
-        <variable
-            name="distance"
-            type="Float" />
-
     </data>
 
     <androidx.cardview.widget.CardView
@@ -71,7 +67,7 @@
                 android:fontFamily="@font/montserrat_400_regular"
                 android:includeFontPadding="false"
                 android:maxLines="1"
-                android:text="@{distance.toString()}"
+                android:text="@{@string/distance_text(location.distance)}"
                 android:textColor="@android:color/black"
                 android:textSize="12sp"
                 tools:text="23km" />

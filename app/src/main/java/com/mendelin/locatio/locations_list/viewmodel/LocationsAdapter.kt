@@ -63,7 +63,7 @@ class LocationsAdapter(private val viewModel: LocationDataViewModel) :
 
         with(holder.binding) {
             with(locationCard) {
-                lifecycleOwner?.let {
+                /*lifecycleOwner?.let {
                     viewModel.getLocation().observe(it) { userLocation ->
                         userLocation?.let {
                             Timber.e("$userLocation")
@@ -74,7 +74,7 @@ class LocationsAdapter(private val viewModel: LocationDataViewModel) :
                             )
                         }
                     }
-                }
+                }*/
 
                 setOnClickListener {
                     GlobalScope.launch {

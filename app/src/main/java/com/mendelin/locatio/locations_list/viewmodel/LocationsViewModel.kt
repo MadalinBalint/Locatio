@@ -1,5 +1,6 @@
 package com.mendelin.locatio.locations_list.viewmodel
 
+import android.location.Location
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -8,6 +9,7 @@ import com.mendelin.locatio.models.LocationInfoObject
 import com.mendelin.locatio.models.LocationInfoRealmObject
 import com.mendelin.locatio.repository.LocationsRepository
 import com.mendelin.locatio.repository.RealmRepository
+import com.mendelin.locatio.utils.ResourceUtils
 import timber.log.Timber
 import javax.inject.Inject
 
@@ -44,5 +46,13 @@ class LocationsViewModel @Inject constructor(
             Timber.e("Reading data from REST API")
             locationsRepository.readData()
         }
+    }
+
+    fun setDistanceFromCurrentLocation(location: Location) {
+        for (entry in originalLocationsList) {
+            entry.distance = ResourceUtils.getDistanceBetweenLocations(entry.lat, entry.lng, location)
+        }
+
+        locationsList.postValue(originalLocationsList)
     }
 }

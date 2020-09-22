@@ -116,28 +116,6 @@ object ResourceUtils {
         val lastLocation = Location("l2")
         lastLocation.latitude = lastSentLocation.latitude
         lastLocation.longitude = lastSentLocation.longitude
-        return location.distanceTo(lastLocation)
+        return location.distanceTo(lastLocation) / 1000.0f
     }
-
-    /*fun mapDataClass2Realm(obj: LocationInfoObject): LocationInfoRealmObject {
-        val realmObject = LocationInfoRealmObject()
-        with(realmObject) {
-            lat = obj.lat
-            lng = obj.lng
-            label = obj.label
-            address = obj.address
-            image = obj.image
-        }
-
-        return realmObject
-    }
-
-    fun mapRealm2DataClass(realmObject: LocationInfoRealmObject) =
-        LocationInfoObject(
-            lat = realmObject.lat,
-            lng = realmObject.lng,
-            label = realmObject.label,
-            address = realmObject.address,
-            image = realmObject.image
-        )*/
 }
