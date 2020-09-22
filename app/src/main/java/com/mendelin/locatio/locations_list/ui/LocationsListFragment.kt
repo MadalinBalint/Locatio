@@ -1,28 +1,26 @@
 package com.mendelin.locatio.locations_list.ui
 
-import android.content.BroadcastReceiver
-import android.content.Context
-import android.content.Intent
-import android.content.IntentFilter
-import android.net.ConnectivityManager
 import android.os.Bundle
 import android.view.View
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.PagerSnapHelper
 import com.mendelin.catpedia.constants.Status
 import com.mendelin.locatio.R
 import com.mendelin.locatio.base_classes.BaseFragment
 import com.mendelin.locatio.di.viewmodels.ViewModelProviderFactory
-import com.mendelin.locatio.locations_list.adapter.LocationsAdapter
-import com.mendelin.locatio.locations_list.adapter.MarginItemDecorationVertical
+import com.mendelin.locatio.locations_list.viewmodel.LocationsAdapter
 import com.mendelin.locatio.locations_list.viewmodel.LocationsViewModel
+import com.mendelin.locatio.repository.RealmRepository
 import com.mendelin.locatio.utils.ResourceUtils
 import kotlinx.android.synthetic.main.fragment_locations_list.*
+import timber.log.Timber
 import javax.inject.Inject
 
 class LocationsListFragment : BaseFragment(R.layout.fragment_locations_list) {
 
-    private var internectBroadcastReceiver: BroadcastReceiver? = null
+    @Inject
+    lateinit var repository: RealmRepository
 
     @Inject
     lateinit var providerFactory: ViewModelProviderFactory
@@ -45,44 +43,26 @@ class LocationsListFragment : BaseFragment(R.layout.fragment_locations_list) {
 
         recyclerLocations.apply {
             adapter = locationsAdapter
-            layoutManager = LinearLayoutManager(context)
+            layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
             isNestedScrollingEnabled = true
-
-            addItemDecoration(
-                MarginItemDecorationVertical(
-                    resources.getDimension(R.dimen.recyclerview_padding).toInt(),
-                    resources.getDimension(R.dimen.recyclerview_padding).toInt()
-                )
-            )
         }
 
-        /* Broadcast receiver to fetch data when the internet connection is back */
-        if (internectBroadcastReceiver == null) {
-            internectBroadcastReceiver = object : BroadcastReceiver() {
-                override fun onReceive(context: Context?, intent: Intent) {
-                    observeViewModel()
-                }
-            }
-        }
-
-        val intentFilter = IntentFilter()
-        intentFilter.addAction(ConnectivityManager.CONNECTIVITY_ACTION)
-        activity?.registerReceiver(internectBroadcastReceiver, intentFilter)
+        val snapHelper = PagerSnapHelper()
+        snapHelper.attachToRecyclerView(recyclerLocations)
 
         /* Setup observers */
         observeViewModel()
     }
 
-    override fun onDestroy() {
-        super.onDestroy()
-
-        internectBroadcastReceiver?.let {
-            activity?.unregisterReceiver(it)
-        }
-    }
-
     private fun observeViewModel() {
-        if (viewModel.isListEmpty()) {
+        val count = repository.countLocations()
+        Timber.e("Locations count = $count")
+        if (count > 0) {
+            Timber.e("Reading data from Realm database")
+            val list = repository.queryLocations()
+            viewModel.setLocationsList(list)
+        } else {
+            Timber.e("Reading data from REST API")
             viewModel.readLocationsData()
                 .observe(viewLifecycleOwner, { list ->
                     list?.let { resource ->
@@ -91,7 +71,8 @@ class LocationsListFragment : BaseFragment(R.layout.fragment_locations_list) {
                                 recyclerLocations.visibility = View.VISIBLE
                                 progressLocationsList.visibility = View.GONE
                                 resource.data?.let { locations ->
-                                    viewModel.setLocationsList(locations)
+                                    repository.saveLocations(locations)
+                                    viewModel.setLocationsList(repository.queryLocations())
                                 }
                             }
                             Status.ERROR -> {

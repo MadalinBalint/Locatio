@@ -27,7 +27,34 @@
 
         <argument
             android:name="location"
-            app:argType="com.mendelin.locatio.models.LocationInfoObject"
+            app:argType="com.mendelin.locatio.models.LocationInfoRealmObject"
+            app:nullable="true" />
+
+        <action
+            android:id="@+id/action_edit_location"
+            app:destination="@id/editLocationFragment"
+            app:enterAnim="@android:anim/fade_in"
+            app:exitAnim="@android:anim/fade_out" />
+
+    </fragment>
+
+    <fragment
+        android:id="@+id/addLocationFragment"
+        android:name="com.mendelin.locatio.add_location.AddLocationFragment"
+        android:label="AddLocationFragment"
+        tools:layout="@layout/fragment_add_location">
+
+    </fragment>
+
+    <fragment
+        android:id="@+id/editLocationFragment"
+        android:name="com.mendelin.locatio.edit_location.EditLocationFragment"
+        android:label="EditLocationFragment"
+        tools:layout="@layout/fragment_edit_location">
+
+        <argument
+            android:name="location"
+            app:argType="com.mendelin.locatio.models.LocationInfoRealmObject"
             app:nullable="true" />
 
     </fragment>

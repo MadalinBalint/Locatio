@@ -7,7 +7,7 @@
 
         <variable
             name="location"
-            type="com.mendelin.locatio.models.LocationInfoObject" />
+            type="com.mendelin.locatio.models.LocationInfoRealmObject" />
 
         <variable
             name="distance"
@@ -26,64 +26,55 @@
         android:focusable="true"
         android:foreground="?selectableItemBackground"
         app:cardCornerRadius="16dp"
-        app:cardElevation="8dp">
+        app:cardElevation="8dp"
+        app:cardUseCompatPadding="true">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal">
+            android:orientation="vertical">
 
             <!-- Location's image -->
             <ImageView
                 android:id="@+id/imgLocation"
-                android:layout_width="160dp"
-                android:layout_height="128dp"
+                android:layout_width="match_parent"
+                android:layout_height="200dp"
                 android:adjustViewBounds="true"
                 android:src="@drawable/ic_placeholder"
-                android:transitionName="locationImage"
                 app:imageUrl="@{location.image}" />
 
-            <LinearLayout
-                android:layout_width="0dp"
+            <!-- Address -->
+            <TextView
+                android:id="@+id/txtAddress"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center_vertical"
-                android:layout_weight="1"
-                android:orientation="vertical">
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="16dp"
+                android:layout_marginEnd="16dp"
+                android:layout_marginBottom="8dp"
+                android:fontFamily="@font/montserrat_500_medium"
+                android:includeFontPadding="false"
+                android:text="@{location.address}"
+                android:textColor="@android:color/black"
+                android:textSize="14sp"
+                tools:text="Piata Avram Iancu 18" />
 
-                <!-- Address -->
-                <TextView
-                    android:id="@+id/txtAddress"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="16dp"
-                    android:layout_marginTop="16dp"
-                    android:layout_marginEnd="8dp"
-                    android:layout_marginBottom="8dp"
-                    android:fontFamily="@font/montserrat_500_medium"
-                    android:includeFontPadding="false"
-                    android:text="@{location.address}"
-                    android:textColor="@android:color/black"
-                    android:textSize="14sp"
-                    tools:text="Piata Avram Iancu 18" />
-
-                <!-- Distance -->
-                <TextView
-                    android:id="@+id/txtDistance"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="16dp"
-                    android:layout_marginEnd="8dp"
-                    android:layout_marginBottom="16dp"
-                    android:ellipsize="end"
-                    android:fontFamily="@font/montserrat_400_regular"
-                    android:includeFontPadding="false"
-                    android:maxLines="1"
-                    android:text="@{distance.toString()}"
-                    android:textColor="@android:color/black"
-                    android:textSize="12sp"
-                    tools:text="23km" />
-
-            </LinearLayout>
+            <!-- Distance -->
+            <TextView
+                android:id="@+id/txtDistance"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginEnd="16dp"
+                android:layout_marginBottom="16dp"
+                android:ellipsize="end"
+                android:fontFamily="@font/montserrat_400_regular"
+                android:includeFontPadding="false"
+                android:maxLines="1"
+                android:text="@{distance.toString()}"
+                android:textColor="@android:color/black"
+                android:textSize="12sp"
+                tools:text="23km" />
 
         </LinearLayout>
 
