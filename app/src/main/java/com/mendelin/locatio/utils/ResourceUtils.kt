@@ -3,6 +3,7 @@ package com.mendelin.locatio.utils
 import android.content.Context
 import android.location.Geocoder
 import android.location.Location
+import android.location.LocationManager
 import android.widget.ImageView
 import androidx.swiperefreshlayout.widget.CircularProgressDrawable
 import com.bumptech.glide.Glide
@@ -110,5 +111,15 @@ object ResourceUtils {
         lastLocation.latitude = lastSentLocation.latitude
         lastLocation.longitude = lastSentLocation.longitude
         return location.distanceTo(lastLocation) / 1000.0f
+    }
+
+    fun getGpsStatus(context: Context?): Boolean {
+        context?.let {
+            val lm = context.getSystemService(Context.LOCATION_SERVICE) as LocationManager?
+            lm?.let {
+                return it.isProviderEnabled(LocationManager.GPS_PROVIDER) || it.isProviderEnabled(LocationManager.NETWORK_PROVIDER)
+            }
+        }
+        return false
     }
 }

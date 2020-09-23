@@ -1,29 +1,25 @@
 package com.mendelin.locatio.locations_list.ui
 
-import android.Manifest
-import android.content.Context.LOCATION_SERVICE
 import android.content.Intent
 import android.content.pm.PackageManager
-import android.location.LocationListener
-import android.location.LocationManager
 import android.net.Uri
 import android.os.Bundle
-import android.os.Looper
 import android.provider.Settings
 import android.view.View
-import android.widget.Toast
-import androidx.core.app.ActivityCompat
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.PagerSnapHelper
+import com.google.android.gms.location.LocationCallback
+import com.google.android.gms.location.LocationResult
 import com.google.android.material.snackbar.Snackbar
-import com.mendelin.locatio.constants.Status
 import com.mendelin.locatio.BuildConfig
 import com.mendelin.locatio.R
 import com.mendelin.locatio.base_classes.BaseFragment
+import com.mendelin.locatio.constants.Status
 import com.mendelin.locatio.di.viewmodels.ViewModelProviderFactory
 import com.mendelin.locatio.locations_list.adapter.LocationsAdapter
 import com.mendelin.locatio.locations_list.viewmodel.LocationsViewModel
+import com.mendelin.locatio.repository.GpsLocationProvider
 import com.mendelin.locatio.repository.RealmRepository
 import com.mendelin.locatio.utils.ResourceUtils
 import kotlinx.android.synthetic.main.fragment_locations_list.*
@@ -32,9 +28,14 @@ import javax.inject.Inject
 
 class LocationsListFragment : BaseFragment(R.layout.fragment_locations_list) {
 
+    private var permissionDeniedShown = false
+
     companion object {
         const val REQUEST_FOREGROUND_ONLY_PERMISSIONS_REQUEST_CODE = 1000
     }
+
+    @Inject
+    lateinit var gpsLocationProvider: GpsLocationProvider
 
     @Inject
     lateinit var repository: RealmRepository
@@ -47,27 +48,36 @@ class LocationsListFragment : BaseFragment(R.layout.fragment_locations_list) {
 
     private lateinit var viewModel: LocationsViewModel
 
+    private val locationCallback = object : LocationCallback() {
+        override fun onLocationResult(locationResult: LocationResult?) {
+            locationResult?.let { result ->
+                result.locations.firstOrNull()?.let {
+                    viewModel.saveLastLocation(it)
+                    viewModel.setDistanceFromCurrentLocation()
+                    Timber.e(it.toString())
+                }
+            }
+        }
+    }
+
+    override fun onPause() {
+        super.onPause()
+
+        gpsLocationProvider.stopLocationUpdates(locationCallback)
+    }
+
     override fun onResume() {
         super.onResume()
 
         toolbarOn()
+
+        gpsLocationProvider.startLocationUpdates(requireContext(), this, locationCallback)
     }
 
-    private fun getLocation() {
-        Timber.e("getLocation")
-        val locationManager = context?.getSystemService(LOCATION_SERVICE) as LocationManager?
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
 
-        val locationListener = LocationListener {
-            viewModel.saveLastLocation(it)
-            viewModel.setDistanceFromCurrentLocation()
-            Timber.e(it.toString())
-        }
-
-        try {
-            locationManager?.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 1000L, 0f, locationListener, Looper.getMainLooper())
-        } catch (ex: SecurityException) {
-            Toast.makeText(activity, "Error while trying to retrieve location!", Toast.LENGTH_SHORT).show()
-        }
+        gpsLocationProvider.createFusedLocationProvider(requireActivity())
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -83,13 +93,6 @@ class LocationsListFragment : BaseFragment(R.layout.fragment_locations_list) {
 
         val snapHelper = PagerSnapHelper()
         snapHelper.attachToRecyclerView(recyclerLocations)
-
-        if (foregroundPermissionApproved()) {
-            Timber.e("foregroundPermissionApproved")
-            getLocation()
-        } else {
-            requestForegroundPermissions()
-        }
 
         /* Setup observers */
         observeViewModel()
@@ -144,30 +147,6 @@ class LocationsListFragment : BaseFragment(R.layout.fragment_locations_list) {
             })
     }
 
-    private fun foregroundPermissionApproved() =
-        ActivityCompat.checkSelfPermission(requireContext(), Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED ||
-                ActivityCompat.checkSelfPermission(requireContext(), Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED
-
-    private fun requestForegroundPermissions() {
-        val provideRationale = foregroundPermissionApproved()
-
-        /* If the user denied a previous request, but didn't check "Don't ask again", provide additional rationale. */
-        if (provideRationale) {
-            Snackbar.make(
-                requireActivity().findViewById(R.id.layoutMainActivity),
-                R.string.permission_rationale,
-                Snackbar.LENGTH_LONG
-            )
-                .setAction(R.string.ok) {
-                    requestPermissions(arrayOf(Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION), REQUEST_FOREGROUND_ONLY_PERMISSIONS_REQUEST_CODE)
-                }
-                .show()
-        } else {
-            Timber.d("Request foreground only permission")
-            requestPermissions(arrayOf(Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION), REQUEST_FOREGROUND_ONLY_PERMISSIONS_REQUEST_CODE)
-        }
-    }
-
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String>, grantResults: IntArray) {
         Timber.d("onRequestPermissionResult")
 
@@ -180,22 +159,28 @@ class LocationsListFragment : BaseFragment(R.layout.fragment_locations_list) {
                 grantResults[0] == PackageManager.PERMISSION_GRANTED -> {
                     /* Permission was granted */
                     Timber.e("PERMISSION_GRANTED")
-                    getLocation()
+                    gpsLocationProvider.getLocation(locationCallback)
                 }
 
                 else -> {
                     /* Permission denied */
-                    Snackbar.make(requireActivity().findViewById(R.id.layoutMainActivity), R.string.permission_denied_explanation, Snackbar.LENGTH_LONG)
-                        .setAction(R.string.settings) {
-                            val uri = Uri.fromParts("package", BuildConfig.APPLICATION_ID, null)
-                            with(Intent()) {
-                                action = Settings.ACTION_APPLICATION_DETAILS_SETTINGS
-                                data = uri
-                                flags = Intent.FLAG_ACTIVITY_NEW_TASK
-                                startActivity(this)
+                    if (!permissionDeniedShown) {
+                        permissionDeniedShown = true
+
+                        Snackbar.make(requireActivity().findViewById(R.id.layoutMainActivity), R.string.permission_denied_explanation, Snackbar.LENGTH_LONG)
+                            .setAction(R.string.settings) {
+                                val uri = Uri.fromParts("package", BuildConfig.APPLICATION_ID, null)
+                                val intent = Intent()
+                                with(intent) {
+                                    action = Settings.ACTION_APPLICATION_DETAILS_SETTINGS
+                                    data = uri
+                                    flags = Intent.FLAG_ACTIVITY_NEW_TASK
+
+                                }
+                                startActivity(intent)
                             }
-                        }
-                        .show()
+                            .show()
+                    }
                 }
             }
         }

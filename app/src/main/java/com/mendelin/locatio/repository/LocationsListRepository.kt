@@ -8,7 +8,7 @@ import com.mendelin.locatio.retrofit.Resource
 import io.reactivex.rxjava3.schedulers.Schedulers
 import javax.inject.Inject
 
-class LocationsRepository @Inject constructor(
+class LocationsListRepository @Inject constructor(
     private val service: LocatioApiService
 ) : LiveData<Resource<List<LocationInfoObject>>>() {
     private fun getLocationsList(): LiveData<Resource<List<LocationInfoObject>>> {

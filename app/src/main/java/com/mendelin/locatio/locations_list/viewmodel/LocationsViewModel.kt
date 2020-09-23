@@ -7,14 +7,14 @@ import androidx.lifecycle.ViewModel
 import com.mendelin.locatio.retrofit.Resource
 import com.mendelin.locatio.models.LocationInfoObject
 import com.mendelin.locatio.models.LocationInfoRealmObject
-import com.mendelin.locatio.repository.LocationsRepository
+import com.mendelin.locatio.repository.LocationsListRepository
 import com.mendelin.locatio.repository.RealmRepository
 import com.mendelin.locatio.utils.ResourceUtils
 import timber.log.Timber
 import javax.inject.Inject
 
 class LocationsViewModel @Inject constructor(
-    private val locationsRepository: LocationsRepository,
+    private val locationsListRepository: LocationsListRepository,
     private val repository: RealmRepository
 ) : ViewModel() {
     private val originalLocationsList: ArrayList<LocationInfoRealmObject> = arrayListOf()
@@ -46,7 +46,7 @@ class LocationsViewModel @Inject constructor(
             null
         } else {
             Timber.e("Reading data from REST API")
-            locationsRepository.readData()
+            locationsListRepository.readData()
         }
     }
 
