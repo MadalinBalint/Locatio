@@ -50,7 +50,7 @@
                 android:layout_marginBottom="8dp"
                 android:fontFamily="@font/montserrat_500_medium"
                 android:includeFontPadding="false"
-                android:text="@{@string/address_text(location.address)}"
+                android:text="@{@string/locations_list_address(location.address)}"
                 android:textColor="@android:color/black"
                 android:textSize="14sp"
                 tools:text="Piata Avram Iancu 18" />
@@ -67,7 +67,7 @@
                 android:fontFamily="@font/montserrat_400_regular"
                 android:includeFontPadding="false"
                 android:maxLines="1"
-                android:text="@{@string/distance_text(location.distance)}"
+                android:text="@{@string/locations_list_distance(location.distance)}"
                 android:textColor="@android:color/black"
                 android:textSize="12sp"
                 tools:text="23km" />

@@ -34,6 +34,11 @@
 
             </FrameLayout>
 
+            <!-- Header -->
+            <TextView
+                style="@style/LocationInfoHeader"
+                android:text="@string/add_location_header" />
+
             <!-- Latitude -->
             <TextView
                 style="@style/LocationInfoTitle"
