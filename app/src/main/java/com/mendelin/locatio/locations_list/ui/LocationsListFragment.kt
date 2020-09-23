@@ -71,6 +71,10 @@ class LocationsListFragment : BaseFragment(R.layout.fragment_locations_list) {
 
         toolbarOn()
 
+        if (!ResourceUtils.getGpsStatus(requireContext())) {
+            Snackbar.make(requireActivity().findViewById(R.id.layoutMainActivity), R.string.gsp_off_explanation, Snackbar.LENGTH_LONG).show()
+        }
+
         gpsLocationProvider.startLocationUpdates(requireContext(), this, locationCallback)
     }
 
