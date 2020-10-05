@@ -15,7 +15,6 @@ import com.google.android.gms.location.LocationResult
 import com.google.android.material.snackbar.Snackbar
 import com.mendelin.locatio.BuildConfig
 import com.mendelin.locatio.R
-import com.mendelin.locatio.base_classes.BaseFragment
 import com.mendelin.locatio.constants.Status
 import com.mendelin.locatio.di.viewmodels.ViewModelProviderFactory
 import com.mendelin.locatio.locations_list.adapter.LocationsAdapter
