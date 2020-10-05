@@ -10,7 +10,7 @@ import javax.inject.Inject
 
 class LocationsListRepository @Inject constructor(
     private val service: LocatioApiService
-) : LiveData<Resource<List<LocationInfoObject>>>() {
+) {
     private fun getLocationsList(): LiveData<Resource<List<LocationInfoObject>>> {
         val locationsList: MutableLiveData<Resource<List<LocationInfoObject>>> = MutableLiveData()
         locationsList.postValue(Resource.loading(data = null))
