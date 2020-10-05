@@ -6,6 +6,7 @@ import android.net.Uri
 import android.os.Bundle
 import android.provider.Settings
 import android.view.View
+import androidx.appcompat.widget.Toolbar
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.PagerSnapHelper
@@ -22,11 +23,12 @@ import com.mendelin.locatio.locations_list.viewmodel.LocationsViewModel
 import com.mendelin.locatio.repository.GpsLocationProvider
 import com.mendelin.locatio.repository.RealmRepository
 import com.mendelin.locatio.utils.ResourceUtils
+import dagger.android.support.DaggerFragment
 import kotlinx.android.synthetic.main.fragment_locations_list.*
 import timber.log.Timber
 import javax.inject.Inject
 
-class LocationsListFragment : BaseFragment(R.layout.fragment_locations_list) {
+class LocationsListFragment : DaggerFragment(R.layout.fragment_locations_list) {
 
     private var permissionDeniedShown = false
 
@@ -69,7 +71,8 @@ class LocationsListFragment : BaseFragment(R.layout.fragment_locations_list) {
     override fun onResume() {
         super.onResume()
 
-        toolbarOn()
+        val toolbar = requireActivity().findViewById<Toolbar>(R.id.toolbar)
+        toolbar.visibility = View.VISIBLE
 
         if (!ResourceUtils.getGpsStatus(requireContext())) {
             Snackbar.make(requireActivity().findViewById(R.id.layoutMainActivity), R.string.gsp_off_explanation, Snackbar.LENGTH_LONG).show()

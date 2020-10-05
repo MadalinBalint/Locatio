@@ -7,16 +7,17 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.appcompat.widget.Toolbar
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.mendelin.locatio.LocationInfoDataBinding
 import com.mendelin.locatio.R
-import com.mendelin.locatio.base_classes.BaseFragment
 import com.mendelin.locatio.utils.ResourceUtils
+import dagger.android.support.DaggerFragment
 import kotlinx.android.synthetic.main.fragment_location_info.*
 
 
-class LocationInfoFragment : BaseFragment(R.layout.fragment_location_info) {
+class LocationInfoFragment : DaggerFragment(R.layout.fragment_location_info) {
 
     private val args: LocationInfoFragmentArgs by navArgs()
 
@@ -40,7 +41,8 @@ class LocationInfoFragment : BaseFragment(R.layout.fragment_location_info) {
     override fun onResume() {
         super.onResume()
 
-        toolbarOff()
+        val toolbar = requireActivity().findViewById<Toolbar>(R.id.toolbar)
+        toolbar.visibility = View.GONE
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {

@@ -6,16 +6,17 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.EditorInfo
+import androidx.appcompat.widget.Toolbar
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.mendelin.locatio.EditLocationDataBinding
 import com.mendelin.locatio.R
-import com.mendelin.locatio.base_classes.BaseFragment
 import com.mendelin.locatio.repository.RealmRepository
+import dagger.android.support.DaggerFragment
 import kotlinx.android.synthetic.main.fragment_edit_location.*
 import javax.inject.Inject
 
-class EditLocationFragment : BaseFragment(R.layout.fragment_edit_location) {
+class EditLocationFragment : DaggerFragment(R.layout.fragment_edit_location) {
 
     private val args: EditLocationFragmentArgs by navArgs()
 
@@ -41,7 +42,8 @@ class EditLocationFragment : BaseFragment(R.layout.fragment_edit_location) {
     override fun onResume() {
         super.onResume()
 
-        toolbarOff()
+        val toolbar = requireActivity().findViewById<Toolbar>(R.id.toolbar)
+        toolbar.visibility = View.GONE
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {

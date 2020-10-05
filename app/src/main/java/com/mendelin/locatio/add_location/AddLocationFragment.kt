@@ -5,14 +5,15 @@ import android.view.KeyEvent
 import android.view.View
 import android.view.inputmethod.EditorInfo
 import android.widget.Toast
+import androidx.appcompat.widget.Toolbar
 import androidx.navigation.fragment.findNavController
 import com.mendelin.locatio.R
-import com.mendelin.locatio.base_classes.BaseFragment
 import com.mendelin.locatio.repository.RealmRepository
+import dagger.android.support.DaggerFragment
 import kotlinx.android.synthetic.main.fragment_add_location.*
 import javax.inject.Inject
 
-class AddLocationFragment : BaseFragment(R.layout.fragment_add_location) {
+class AddLocationFragment : DaggerFragment(R.layout.fragment_add_location) {
 
     @Inject
     lateinit var repository: RealmRepository
@@ -20,7 +21,8 @@ class AddLocationFragment : BaseFragment(R.layout.fragment_add_location) {
     override fun onResume() {
         super.onResume()
 
-        toolbarOff()
+        val toolbar = requireActivity().findViewById<Toolbar>(R.id.toolbar)
+        toolbar.visibility = View.GONE
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
