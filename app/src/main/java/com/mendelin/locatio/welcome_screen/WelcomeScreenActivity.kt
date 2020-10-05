@@ -2,16 +2,16 @@ package com.mendelin.locatio.welcome_screen
 
 import android.content.Intent
 import android.os.Bundle
-import android.os.Handler
+import android.view.MenuItem
 import com.mendelin.locatio.R
-import com.mendelin.locatio.base_classes.BaseActivity
 import com.mendelin.locatio.main.MainActivity
+import dagger.android.support.DaggerAppCompatActivity
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 
-class WelcomeScreenActivity : BaseActivity(R.layout.activity_welcome_screen) {
+class WelcomeScreenActivity : DaggerAppCompatActivity(R.layout.activity_welcome_screen) {
     companion object {
         private const val SPLASH_TIME_OUT = 2000L
     }
@@ -30,5 +30,13 @@ class WelcomeScreenActivity : BaseActivity(R.layout.activity_welcome_screen) {
         intent.flags = Intent.FLAG_ACTIVITY_SINGLE_TOP or Intent.FLAG_ACTIVITY_CLEAR_TOP
         startActivity(intent)
         finish()
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when (item.itemId) {
+            android.R.id.home ->
+                onBackPressed()
+        }
+        return true
     }
 }
