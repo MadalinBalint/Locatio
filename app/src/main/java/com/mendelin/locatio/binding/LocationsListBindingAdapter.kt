@@ -1,4 +1,4 @@
-package com.mendelin.locatio.locations_list.adapter
+package com.mendelin.locatio.binding
 
 import android.widget.ImageView
 import androidx.databinding.BindingAdapter

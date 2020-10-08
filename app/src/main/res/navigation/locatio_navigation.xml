@@ -7,7 +7,7 @@
 
     <fragment
         android:id="@+id/locationsFragment"
-        android:name="com.mendelin.locatio.locations_list.ui.LocationsListFragment"
+        android:name="com.mendelin.locatio.ui.fragments.LocationsListFragment"
         android:label="LocationsListFragment"
         tools:layout="@layout/fragment_locations_list">
 
@@ -21,7 +21,7 @@
 
     <fragment
         android:id="@+id/locationInfoFragment"
-        android:name="com.mendelin.locatio.location_info.ui.LocationInfoFragment"
+        android:name="com.mendelin.locatio.ui.fragments.LocationInfoFragment"
         android:label="LocationInfoFragment"
         tools:layout="@layout/fragment_location_info">
 
@@ -40,7 +40,7 @@
 
     <fragment
         android:id="@+id/addLocationFragment"
-        android:name="com.mendelin.locatio.add_location.AddLocationFragment"
+        android:name="com.mendelin.locatio.ui.fragments.AddLocationFragment"
         android:label="AddLocationFragment"
         tools:layout="@layout/fragment_add_location">
 
@@ -48,7 +48,7 @@
 
     <fragment
         android:id="@+id/editLocationFragment"
-        android:name="com.mendelin.locatio.edit_location.EditLocationFragment"
+        android:name="com.mendelin.locatio.ui.fragments.EditLocationFragment"
         android:label="EditLocationFragment"
         tools:layout="@layout/fragment_edit_location">
 

@@ -1,10 +1,9 @@
-package com.mendelin.locatio.welcome_screen
+package com.mendelin.locatio.ui.activity
 
 import android.content.Intent
 import android.os.Bundle
 import android.view.MenuItem
 import com.mendelin.locatio.R
-import com.mendelin.locatio.main.MainActivity
 import dagger.android.support.DaggerAppCompatActivity
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.delay

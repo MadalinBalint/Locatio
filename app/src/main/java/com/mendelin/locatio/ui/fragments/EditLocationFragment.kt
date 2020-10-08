@@ -1,4 +1,4 @@
-package com.mendelin.locatio.edit_location
+package com.mendelin.locatio.ui.fragments
 
 import android.os.Bundle
 import android.view.KeyEvent
@@ -11,6 +11,7 @@ import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.mendelin.locatio.EditLocationDataBinding
 import com.mendelin.locatio.R
+import com.mendelin.locatio.ui.fragments.EditLocationFragmentArgs
 import com.mendelin.locatio.repository.RealmRepository
 import dagger.android.support.DaggerFragment
 import kotlinx.android.synthetic.main.fragment_edit_location.*

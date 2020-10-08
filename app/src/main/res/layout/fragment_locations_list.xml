@@ -9,7 +9,7 @@
         android:background="@android:color/white"
         android:fillViewport="true"
         android:scrollbars="vertical"
-        tools:context="com.mendelin.locatio.locations_list.ui.LocationsListFragment">
+        tools:context="com.mendelin.locatio.ui.fragments.LocationsListFragment">
 
         <FrameLayout
             android:layout_width="match_parent"

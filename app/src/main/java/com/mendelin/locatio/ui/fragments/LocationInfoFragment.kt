@@ -1,4 +1,4 @@
-package com.mendelin.locatio.location_info.ui
+package com.mendelin.locatio.ui.fragments
 
 import android.content.Intent
 import android.net.Uri

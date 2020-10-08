@@ -1,4 +1,4 @@
-package com.mendelin.locatio.main
+package com.mendelin.locatio.ui.activity
 
 import android.os.Bundle
 import android.view.MenuItem

@@ -14,7 +14,7 @@ import com.google.android.gms.location.LocationRequest
 import com.google.android.gms.location.LocationServices
 import com.google.android.material.snackbar.Snackbar
 import com.mendelin.locatio.R
-import com.mendelin.locatio.locations_list.ui.LocationsListFragment
+import com.mendelin.locatio.ui.fragments.LocationsListFragment
 import timber.log.Timber
 
 class GpsLocationProvider {

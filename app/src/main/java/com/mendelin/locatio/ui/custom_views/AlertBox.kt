@@ -1,4 +1,4 @@
-package com.mendelin.locatio.custom_views
+package com.mendelin.locatio.ui.custom_views
 
 import android.content.Context
 import android.content.DialogInterface

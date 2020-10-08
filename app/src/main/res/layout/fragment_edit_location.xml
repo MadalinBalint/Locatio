@@ -18,7 +18,7 @@
         android:background="@android:color/white"
         android:fillViewport="true"
         android:scrollbars="vertical"
-        tools:context=".edit_location.EditLocationFragment">
+        tools:context=".ui.fragments.EditLocationFragment">
 
         <LinearLayout
             android:id="@+id/layoutPages"

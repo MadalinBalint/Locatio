@@ -1,4 +1,4 @@
-package com.mendelin.locatio.locations_list.viewmodel
+package com.mendelin.locatio.viewmodels
 
 import android.location.Location
 import androidx.lifecycle.LiveData
@@ -9,7 +9,6 @@ import com.mendelin.locatio.models.LocationInfoObject
 import com.mendelin.locatio.models.LocationInfoRealmObject
 import com.mendelin.locatio.repository.LocationsListRepository
 import com.mendelin.locatio.repository.RealmRepository
-import com.mendelin.locatio.utils.ResourceUtils
 import timber.log.Timber
 import javax.inject.Inject
 
@@ -57,10 +56,20 @@ class LocationsViewModel @Inject constructor(
     fun setDistanceFromCurrentLocation() {
         lastLocation?.let { location ->
             originalLocationsList.forEach {
-                it.distance = ResourceUtils.getDistanceBetweenLocations(it.lat, it.lng, location)
+                it.distance = getDistanceBetweenLocations(it.lat, it.lng, location)
             }
 
             locationsList.value = originalLocationsList
         }
+    }
+
+    private fun getDistanceBetweenLocations(lat: Double, lng: Double, lastSentLocation: Location): Float {
+        val location = Location("l1")
+        location.latitude = lat
+        location.longitude = lng
+        val lastLocation = Location("l2")
+        lastLocation.latitude = lastSentLocation.latitude
+        lastLocation.longitude = lastSentLocation.longitude
+        return location.distanceTo(lastLocation) / 1000.0f
     }
 }

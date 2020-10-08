@@ -1,4 +1,4 @@
-package com.mendelin.locatio.add_location
+package com.mendelin.locatio.ui.fragments
 
 import android.os.Bundle
 import android.view.KeyEvent

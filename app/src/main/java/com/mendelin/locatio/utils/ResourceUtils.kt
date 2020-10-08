@@ -11,7 +11,7 @@ import com.bumptech.glide.load.DecodeFormat
 import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.bumptech.glide.request.RequestOptions
 import com.mendelin.locatio.R
-import com.mendelin.locatio.custom_views.AlertBox
+import com.mendelin.locatio.ui.custom_views.AlertBox
 import java.io.IOException
 import java.util.*
 
@@ -103,23 +103,5 @@ object ResourceUtils {
         return ""
     }
 
-    fun getDistanceBetweenLocations(lat: Double, lng: Double, lastSentLocation: Location): Float {
-        val location = Location("l1")
-        location.latitude = lat
-        location.longitude = lng
-        val lastLocation = Location("l2")
-        lastLocation.latitude = lastSentLocation.latitude
-        lastLocation.longitude = lastSentLocation.longitude
-        return location.distanceTo(lastLocation) / 1000.0f
-    }
 
-    fun getGpsStatus(context: Context?): Boolean {
-        context?.let {
-            val lm = context.getSystemService(Context.LOCATION_SERVICE) as LocationManager?
-            lm?.let {
-                return it.isProviderEnabled(LocationManager.GPS_PROVIDER) || it.isProviderEnabled(LocationManager.NETWORK_PROVIDER)
-            }
-        }
-        return false
-    }
 }

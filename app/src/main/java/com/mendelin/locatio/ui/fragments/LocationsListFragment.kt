@@ -1,7 +1,9 @@
-package com.mendelin.locatio.locations_list.ui
+package com.mendelin.locatio.ui.fragments
 
+import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.location.LocationManager
 import android.net.Uri
 import android.os.Bundle
 import android.provider.Settings
@@ -15,13 +17,13 @@ import com.google.android.gms.location.LocationResult
 import com.google.android.material.snackbar.Snackbar
 import com.mendelin.locatio.BuildConfig
 import com.mendelin.locatio.R
+import com.mendelin.locatio.adapter.LocationsAdapter
 import com.mendelin.locatio.constants.Status
 import com.mendelin.locatio.di.viewmodels.ViewModelProviderFactory
-import com.mendelin.locatio.locations_list.adapter.LocationsAdapter
-import com.mendelin.locatio.locations_list.viewmodel.LocationsViewModel
 import com.mendelin.locatio.repository.GpsLocationProvider
 import com.mendelin.locatio.repository.RealmRepository
 import com.mendelin.locatio.utils.ResourceUtils
+import com.mendelin.locatio.viewmodels.LocationsViewModel
 import dagger.android.support.DaggerFragment
 import kotlinx.android.synthetic.main.fragment_locations_list.*
 import timber.log.Timber
@@ -73,7 +75,7 @@ class LocationsListFragment : DaggerFragment(R.layout.fragment_locations_list) {
         val toolbar = requireActivity().findViewById<Toolbar>(R.id.toolbar)
         toolbar.visibility = View.VISIBLE
 
-        if (!ResourceUtils.getGpsStatus(requireContext())) {
+        if (!getGpsStatus(requireContext())) {
             Snackbar.make(requireActivity().findViewById(R.id.layoutMainActivity), R.string.gsp_off_explanation, Snackbar.LENGTH_LONG).show()
         }
 
@@ -190,5 +192,15 @@ class LocationsListFragment : DaggerFragment(R.layout.fragment_locations_list) {
                 }
             }
         }
+    }
+
+    private fun getGpsStatus(context: Context?): Boolean {
+        context?.let {
+            val lm = context.getSystemService(Context.LOCATION_SERVICE) as LocationManager?
+            lm?.let {
+                return it.isProviderEnabled(LocationManager.GPS_PROVIDER) || it.isProviderEnabled(LocationManager.NETWORK_PROVIDER)
+            }
+        }
+        return false
     }
 }

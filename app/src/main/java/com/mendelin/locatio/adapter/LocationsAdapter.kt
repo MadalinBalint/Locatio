@@ -1,4 +1,4 @@
-package com.mendelin.locatio.locations_list.adapter
+package com.mendelin.locatio.adapter
 
 import android.content.Context
 import android.view.LayoutInflater
@@ -8,8 +8,8 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.mendelin.locatio.ItemLocationListDataBinding
-import com.mendelin.locatio.locations_list.ui.LocationsListFragmentDirections
 import com.mendelin.locatio.models.LocationInfoRealmObject
+import com.mendelin.locatio.ui.fragments.LocationsListFragmentDirections
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
