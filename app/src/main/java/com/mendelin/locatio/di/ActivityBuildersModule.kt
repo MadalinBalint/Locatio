@@ -7,8 +7,8 @@ import com.mendelin.locatio.di.main.MainViewModelsModule
 import com.mendelin.locatio.di.welcome_screen.WelcomeScreenModule
 import com.mendelin.locatio.di.welcome_screen.WelcomeScreenScope
 import com.mendelin.locatio.di.welcome_screen.WelcomeScreenViewModelsModule
-import com.mendelin.locatio.main.MainActivity
-import com.mendelin.locatio.welcome_screen.WelcomeScreenActivity
+import com.mendelin.locatio.ui.activity.MainActivity
+import com.mendelin.locatio.ui.activity.WelcomeScreenActivity
 import dagger.Module
 import dagger.android.ContributesAndroidInjector
 

@@ -1,6 +1,6 @@
 package com.mendelin.locatio.di.main
 
-import com.mendelin.locatio.locations_list.adapter.LocationsAdapter
+import com.mendelin.locatio.adapter.LocationsAdapter
 import com.mendelin.locatio.repository.GpsLocationProvider
 import com.mendelin.locatio.repository.LocationsListRepository
 import com.mendelin.locatio.repository.RealmRepository
