@@ -8,7 +8,6 @@ import com.bumptech.glide.load.DecodeFormat
 import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.bumptech.glide.request.RequestOptions
 import com.mendelin.locatio.R
-import com.mendelin.locatio.utils.ResourceUtils
 
 @BindingAdapter("locationImage")
 /* Binding adapter for the location image in locations list */

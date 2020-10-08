@@ -74,15 +74,15 @@ class AddLocationFragment : DaggerFragment(R.layout.fragment_add_location) {
 
             repository.createLocationObject(lat, lng, label, address, image)
 
-            findNavController().navigateUp()
+            findNavController().popBackStack()
         }
 
         btnCancel.setOnClickListener {
-            findNavController().navigateUp()
+            findNavController().popBackStack()
         }
 
         btnBack.setOnClickListener {
-            findNavController().navigateUp()
+            findNavController().popBackStack()
         }
     }
 }

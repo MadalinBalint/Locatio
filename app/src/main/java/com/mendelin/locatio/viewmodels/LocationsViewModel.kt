@@ -4,11 +4,11 @@ import android.location.Location
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.mendelin.locatio.retrofit.Resource
 import com.mendelin.locatio.models.LocationInfoObject
 import com.mendelin.locatio.models.LocationInfoRealmObject
 import com.mendelin.locatio.repository.LocationsListRepository
 import com.mendelin.locatio.repository.RealmRepository
+import com.mendelin.locatio.retrofit.Resource
 import timber.log.Timber
 import javax.inject.Inject
 
@@ -17,7 +17,6 @@ class LocationsViewModel @Inject constructor(
     private val repository: RealmRepository
 ) : ViewModel() {
     private val originalLocationsList: ArrayList<LocationInfoRealmObject> = arrayListOf()
-
     private val locationsList = MutableLiveData<ArrayList<LocationInfoRealmObject>>()
     private val error = MutableLiveData<String>()
     private var lastLocation: Location? = null
