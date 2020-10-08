@@ -19,7 +19,7 @@ class LocationsViewModel @Inject constructor(
     private val originalLocationsList: ArrayList<LocationInfoRealmObject> = arrayListOf()
 
     private val locationsList = MutableLiveData<ArrayList<LocationInfoRealmObject>>()
-    private val errorFilter = MutableLiveData<String>()
+    private val error = MutableLiveData<String>()
     private var lastLocation: Location? = null
 
     fun getLocationsList(): LiveData<ArrayList<LocationInfoRealmObject>> = locationsList
@@ -32,7 +32,7 @@ class LocationsViewModel @Inject constructor(
         locationsList.postValue(originalLocationsList)
     }
 
-    fun getErrorFilter() = errorFilter
+    fun getError() = error
 
     fun readLocationsData(): LiveData<Resource<List<LocationInfoObject>>>? {
         val count = repository.countLocations()
@@ -51,6 +51,10 @@ class LocationsViewModel @Inject constructor(
 
     fun saveLastLocation(location: Location) {
         lastLocation = location
+    }
+
+    fun errorHandled() {
+        error.value = ""
     }
 
     fun setDistanceFromCurrentLocation() {

@@ -1,6 +1,8 @@
 package com.mendelin.locatio.ui.fragments
 
+import android.content.Context
 import android.content.Intent
+import android.location.Geocoder
 import android.net.Uri
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -12,9 +14,10 @@ import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.mendelin.locatio.LocationInfoDataBinding
 import com.mendelin.locatio.R
-import com.mendelin.locatio.utils.ResourceUtils
 import dagger.android.support.DaggerFragment
 import kotlinx.android.synthetic.main.fragment_location_info.*
+import java.io.IOException
+import java.util.*
 
 
 class LocationInfoFragment : DaggerFragment(R.layout.fragment_location_info) {
@@ -31,7 +34,7 @@ class LocationInfoFragment : DaggerFragment(R.layout.fragment_location_info) {
 
         args.location?.let {
             binding.location = it
-            binding.fullAddress = ResourceUtils.getAddressLong(requireContext(), it.lat, it.lng)
+            binding.fullAddress = getAddressLong(requireContext(), it.lat, it.lng)
             binding.coordinates = "${it.lat}, ${it.lng}"
         }
 
@@ -73,7 +76,62 @@ class LocationInfoFragment : DaggerFragment(R.layout.fragment_location_info) {
         }
 
         btnBack.setOnClickListener {
-            findNavController().navigateUp()
+            findNavController().popBackStack()
         }
+    }
+
+    private fun getAddressLong(context: Context, lat: Double, lng: Double): String {
+        val array = arrayListOf<String>()
+        val geocoder = Geocoder(context, Locale.getDefault())
+        try {
+            val addresses = geocoder.getFromLocation(lat, lng, 1)
+            if (addresses != null && addresses.size > 0) {
+                val obj = addresses[0]
+                if (obj != null) {
+                    /* Address */
+                    if (!obj.getAddressLine(0).isNullOrEmpty())
+                        array.add(obj.getAddressLine(0))
+
+                    /* Country */
+                    /*if (!obj.countryName.isNullOrEmpty())
+                        array.add(obj.countryName)*/
+
+                    /* Country code */
+                    if (!obj.countryCode.isNullOrEmpty())
+                        array.add(obj.countryCode)
+
+                    /* Admin Area */
+                    /*if (!obj.adminArea.isNullOrEmpty())
+                        array.add("Adamin "+obj.adminArea)*/
+
+                    /* Postal Code */
+                    /*if (!obj.postalCode.isNullOrEmpty())
+                        array.add(obj.postalCode)*/
+
+                    /* Sub Admin Area */
+                    if (!obj.subAdminArea.isNullOrEmpty())
+                        array.add(obj.subAdminArea)
+
+                    /* Locality */
+                    /*if (!obj.locality.isNullOrEmpty())
+                        array.add(obj.locality)*/
+
+                    /* Sub Locality */
+                    /*if (!obj.subLocality.isNullOrEmpty())
+                        array.add(obj.subLocality)*/
+
+                    /* Sub Thoroughfare */
+                    /*if (!obj.subThoroughfare.isNullOrEmpty())
+                        array.add(obj.subThoroughfare)*/
+
+                    return array.joinToString(separator = ", ")
+                }
+            } else {
+                return ""
+            }
+        } catch (e: IOException) {
+            e.printStackTrace()
+        }
+        return ""
     }
 }

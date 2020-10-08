@@ -22,7 +22,7 @@ import com.mendelin.locatio.constants.Status
 import com.mendelin.locatio.di.viewmodels.ViewModelProviderFactory
 import com.mendelin.locatio.repository.GpsLocationProvider
 import com.mendelin.locatio.repository.RealmRepository
-import com.mendelin.locatio.utils.ResourceUtils
+import com.mendelin.locatio.ui.custom_views.AlertBox
 import com.mendelin.locatio.viewmodels.LocationsViewModel
 import dagger.android.support.DaggerFragment
 import kotlinx.android.synthetic.main.fragment_locations_list.*
@@ -123,7 +123,7 @@ class LocationsListFragment : DaggerFragment(R.layout.fragment_locations_list) {
                         Status.ERROR -> {
                             recyclerLocations.visibility = View.VISIBLE
                             progressLocationsList.visibility = View.GONE
-                            ResourceUtils.showErrorAlert(
+                            showErrorAlert(
                                 requireContext(), list.message
                                     ?: getString(R.string.alert_error_unknown)
                             )
@@ -138,19 +138,14 @@ class LocationsListFragment : DaggerFragment(R.layout.fragment_locations_list) {
 
         viewModel.getLocationsList()
             .observe(viewLifecycleOwner, { list ->
-                list?.let {
-                    recyclerLocations.visibility = View.GONE
-                    locationsAdapter.setList(list)
-                    locationsAdapter.notifyDataSetChanged()
-                    recyclerLocations.visibility = View.VISIBLE
-                }
+                locationsAdapter.setList(list ?: emptyList())
             })
 
-        viewModel.getErrorFilter()
+        viewModel.getError()
             .observe(viewLifecycleOwner, { error ->
                 if (error.isNotEmpty()) {
-                    ResourceUtils.showErrorAlert(requireContext(), error)
-                    viewModel.getErrorFilter().postValue("")
+                    showErrorAlert(requireContext(), error)
+                    viewModel.errorHandled()
                 }
             })
     }
@@ -202,5 +197,15 @@ class LocationsListFragment : DaggerFragment(R.layout.fragment_locations_list) {
             }
         }
         return false
+    }
+
+    private fun showErrorAlert(context: Context, msg: String) {
+        val alert = AlertBox()
+
+        alert.setPositiveButtonListener { dialog, _ ->
+            dialog.dismiss()
+        }
+
+        alert.showAlert(context, context.getString(R.string.alert_error), msg, context.getString(R.string.alert_ok), null)
     }
 }
